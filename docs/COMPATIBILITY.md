@@ -39,7 +39,7 @@ What FGT relies on, where each fact came from, and what still needs testing insi
 
 ## SavedVariables
 
-- `ForeverGraphicsTweaksDB` holds the baseline, profiles, the preview journal, window position, and a load counter.
+- `ForeverGraphicsTweaksDB` holds the baseline, profiles, window position, and a load counter.
 - Early Forever beta builds had reports of SavedVariables not loading. Not verified on 70790. `/fgt diag` shows the load counter. If it stays at 1 after a reload, persistence is broken.
 
 ## Textures

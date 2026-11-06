@@ -17,7 +17,7 @@ Sources: Blizzard's UI source on the `forever` branch at build 1.60.1.70790 (Get
 - **In-game validation needs the user.** No one can run the Forever client from this repo. Every setting ships marked unverified, and 0.1.0 is a pre-release. 1.0 waits for the smoke test in `docs/TESTING.md`.
 - **Hiding `SettingsPanel` risks taint.** See ADR 0001. FGT uses its own window so the preview never touches Blizzard frames.
 - **SavedVariables on Forever.** Early beta builds had reports of SavedVariables not loading. Unverified on 70790. The baseline and profiles depend on it, so diagnostics shows a load counter.
-- **Crash recovery is limited.** The client writes `Config.wtf` and SavedVariables on a clean exit. A hard crash can lose the journal. ADR 0002 covers what FGT can and cannot recover.
+- **Crash recovery is limited.** The client writes `Config.wtf` and SavedVariables on a clean exit. A hard crash may skip both. ADR 0002 explains why FGT does not try to journal a test.
 - **Some changes are not visible within 15 seconds.** Ground clutter and terrain LOD load as the world streams. The overlay tells the user to move the camera, and the setting text says when an effect is delayed.
 
 ## Scope cuts

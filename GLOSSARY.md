@@ -23,9 +23,9 @@ Terms used in code, docs, and issues for Forever Graphics Tweaks (FGT).
 
 ## Preview
 
-- **Preview** (or **test**): a timed trial of pending values. FGT snapshots, validates, applies, reads back, then shows the countdown overlay.
-- **Snapshot**: the live values of every CVar the preview will change, captured just before applying.
-- **Journal**: a copy of the snapshot written to SavedVariables before applying, so an interrupted preview can be detected on the next load.
+- **Preview** (or **test**): a timed trial of pending values. FGT validates, snapshots, applies, reads back, then shows the countdown overlay.
+- **Snapshot**: the live values of every available managed CVar, captured just before a preview applies.
+- **Applied map**: live values read right after a preview applies. Revert leaves alone any CVar whose live value no longer matches it.
 - **Keep**: accept the previewed values. They become the live configuration.
 - **Revert**: put the snapshot back. Timeout means Revert.
 - **Restore Original**: put the baseline back, after a confirmation. Different from Revert.

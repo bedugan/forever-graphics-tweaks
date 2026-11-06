@@ -1,4 +1,4 @@
-# 2. Preview as a transaction with a journal
+# 2. Preview as a transaction
 
 Date: 2026-11-06. Status: accepted.
 
@@ -14,18 +14,22 @@ Starting a preview:
 
 1. Refuse in combat or when another preview is active.
 2. Validate every pending value against Definitions and current CVar status. Any invalid value aborts before writing.
-3. Snapshot live values for every CVar that will change.
-4. Write the journal (snapshot plus applied values) to SavedVariables.
+3. Capture the baseline if this is FGT's first write (ADR 0004).
+4. Snapshot live values for every available managed setting.
 5. Apply tier 1 then tier 2. Read back after each write.
-6. If any write errors or is rejected, restore everything already written in reverse order, clear the journal, and report which setting failed. Clamped values are accepted and shown to the user.
-7. Start the countdown. The deadline is `clock() + 15` using an injected clock (`GetTime` in game), checked from `OnUpdate`. Frame count is never used.
+6. If any write errors or is rejected, write the snapshot back and report which setting failed. Clamped values are accepted and reported in chat.
+7. Read every managed value again (the "applied" map), then start the countdown. The deadline is `clock() + 15` using an injected clock (`GetTime` in game). An unparented driver frame checks it from `OnUpdate`, so hiding the UI does not stall it. Frame count is never used.
 
-Revert writes the snapshot back, tier 2 first and then tier 1, in reverse apply order. It skips any CVar whose live value no longer matches what FGT applied, because something else changed it. Timeout calls Revert. Nothing commits without a Keep click.
+Revert first decides which CVars are still FGT's: any CVar whose live value no longer matches the applied map was changed by something else and is left alone. It then writes the snapshot back in tier order, re-reading each value just before writing, because reverting a parent rewrites its children. Timeout calls Revert. Nothing commits without a Keep click.
 
-`PLAYER_LOGOUT` (which also fires on reload) reverts an active preview, so the saved config is the pre-test one. If FGT loads and finds a journal, the previous session ended mid-preview without a clean logout. FGT does not touch CVars at load. It shows a prompt offering to restore the journaled values or discard the journal.
+`PLAYER_LOGOUT` (which also fires on reload) reverts an active preview, so the client saves the pre-test values.
+
+## Rejected: a crash-recovery journal
+
+The first draft wrote the snapshot to SavedVariables before applying, to detect an interrupted preview on the next load. The client writes SavedVariables only on a clean logout or reload, and `PLAYER_LOGOUT` already reverts and would clear the journal. After a crash the journal never reaches disk. It would add code and a recovery prompt for a case it cannot catch.
 
 ## Consequences
 
 - No silent commits. Every exit path except Keep restores the snapshot.
-- Crash recovery is best effort. If the client dies before it writes `Config.wtf`, the previewed values may never persist anyway. If it writes `Config.wtf` but not SavedVariables, FGT has no journal. Docs must not promise more.
-- Skipping externally changed CVars means Revert can be partial. The overlay reports which ones it left alone.
+- After a hard crash during a test, the outcome depends on when the client last wrote `Config.wtf`. If it writes only on exit, the pre-test values survive. This is unverified and listed in the smoke test. Docs must not promise crash recovery.
+- Skipping externally changed CVars means Revert can be partial. Chat reports which ones FGT left alone.
