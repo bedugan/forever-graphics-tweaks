@@ -1,0 +1,25 @@
+## Interface: 16001
+## Title: Forever Graphics Tweaks
+## Notes: Preview advanced graphics settings safely, with a 15 second keep-or-revert timer.
+## Author: Brian Dugan
+## Version: 0.1.0
+## SavedVariables: ForeverGraphicsTweaksDB
+## IconTexture: Interface\Icons\INV_Misc_Spyglass_03
+## Category: Graphics
+
+Core\Namespace.lua
+Core\Definitions.lua
+Core\CVarStore.lua
+Core\Experience.lua
+Core\Pending.lua
+Core\Profiles.lua
+Core\Preview.lua
+Core\Diagnostics.lua
+Media\Manifest.lua
+UI\Widgets.lua
+UI\Dialogs.lua
+UI\Comparison.lua
+UI\Overlay.lua
+UI\MainWindow.lua
+UI\SettingsEntry.lua
+Core\Init.lua
