@@ -77,7 +77,7 @@ local help = {
 
 SLASH_FOREVERGRAPHICSTWEAKS1 = "/fgt"
 SlashCmdList.FOREVERGRAPHICSTWEAKS = function(msg)
-	local command = strtrim(msg or ""):lower()
+	local command = (msg or ""):match("^%s*(.-)%s*$"):lower()
 	if command == "" then
 		ns.MainWindow.toggle()
 	elseif command == "diag" then
