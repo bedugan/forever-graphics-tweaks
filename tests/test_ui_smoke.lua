@@ -194,7 +194,7 @@ test("ui: Test hides windows, overlay times out and reverts, window returns", fu
 	find("Test settings"):Click()
 	truthy(ns.Preview.isActive())
 	eq(window():IsShown(), false)
-	eq(SettingsPanel:IsShown(), false)
+	truthy(SettingsPanel:IsShown(), "a test never touches Blizzard's panel")
 	truthy(overlay():IsShown())
 	eq(env.cvars.value("graphicsViewDistance"), 9)
 

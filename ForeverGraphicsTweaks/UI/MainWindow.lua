@@ -410,14 +410,11 @@ local function buildHeader()
 end
 
 local function test()
+	-- PREVIEW_STARTED hides this window. Blizzard's panels are left alone
+	-- during a test (ADR 0001).
 	local ok, message = ns.Preview.start()
 	if not ok then
 		setStatus(message, true)
-		return
-	end
-	-- Clear the view so the change is visible. The overlay stays up.
-	if SettingsPanel and SettingsPanel:IsShown() then
-		pcall(HideUIPanel, SettingsPanel)
 	end
 end
 
