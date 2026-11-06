@@ -97,17 +97,19 @@ function Preview.revert(reason)
 	state = nil
 
 	-- Decide what is ours before writing, because writing a quality-level
-	-- parent rewrites its children.
-	local restorable, skipped = {}, {}
-	for cvar in pairs(current.snapshot) do
+	-- parent rewrites its children. A skipped setting keeps its live value,
+	-- written back after its parent if the parent changed it.
+	local targets, skipped = {}, {}
+	for cvar, value in pairs(current.snapshot) do
 		local live, applied = Store.get(cvar), current.applied[cvar]
 		if live ~= nil and applied ~= nil and not Store.near(live, applied) then
 			table.insert(skipped, cvar)
+			targets[cvar] = live
 		else
-			restorable[cvar] = true
+			targets[cvar] = value
 		end
 	end
-	local records = Store.writeValues(current.snapshot, restorable)
+	local records = Store.writeValues(targets)
 	ns.emit("PREVIEW_ENDED", reason or "manual", records, skipped)
 	return true, records, skipped
 end

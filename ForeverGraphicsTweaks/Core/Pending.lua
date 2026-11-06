@@ -1,12 +1,14 @@
 -- Pending values: what the user picked but has not applied. Nothing here
--- writes a CVar. Entries only exist where the pending value differs from live.
+-- writes a CVar. A pick counts as pending only while it differs from live,
+-- but picks that match live are kept too, because a tested quality-level
+-- parent can rewrite them.
 local _, ns = ...
 
 local Store = ns.CVarStore
 local Pending = {}
 ns.Pending = Pending
 
-local values = {}
+local picks = {}
 local lastCustom -- manual edits saved when a preset replaced them
 
 local function copy(map)
@@ -15,10 +17,6 @@ local function copy(map)
 		out[k] = v
 	end
 	return out
-end
-
-local function isEmpty(map)
-	return next(map) == nil
 end
 
 function Pending.normalize(setting, value)
@@ -41,21 +39,22 @@ local function put(cvar, value)
 	if value == nil then
 		return false
 	end
-	local live = Store.get(cvar)
-	if live ~= nil and Store.near(live, value) then
-		values[cvar] = nil
-	else
-		values[cvar] = value
-	end
+	picks[cvar] = value
 	return true
 end
 
+-- The pick for cvar if it differs from live, else nil.
 function Pending.get(cvar)
-	return values[cvar]
+	local value = picks[cvar]
+	local live = Store.get(cvar)
+	if value ~= nil and (live == nil or not Store.near(live, value)) then
+		return value
+	end
+	return nil
 end
 
 function Pending.effective(cvar)
-	local value = values[cvar]
+	local value = picks[cvar]
 	if value ~= nil then
 		return value
 	end
@@ -80,14 +79,14 @@ function Pending.set(cvar, value)
 end
 
 function Pending.clear()
-	values = {}
+	picks = {}
 	ns.emit("PENDING_CHANGED")
 end
 
 -- Replaces all pending values with `map` (cvar -> number). Unknown or
 -- unavailable settings are ignored.
 function Pending.load(map)
-	values = {}
+	picks = {}
 	for cvar, value in pairs(map) do
 		if Store.status(cvar) == "available" then
 			put(cvar, value)
@@ -98,8 +97,10 @@ end
 
 function Pending.count()
 	local n = 0
-	for _ in pairs(values) do
-		n = n + 1
+	for cvar in pairs(picks) do
+		if Pending.get(cvar) ~= nil then
+			n = n + 1
+		end
 	end
 	return n
 end
@@ -117,7 +118,7 @@ local function matches(presetKey)
 		if Store.status(setting.cvar) == "available" then
 			local target = Pending.presetValue(setting, presetKey)
 			if target == nil then
-				if values[setting.cvar] ~= nil then
+				if Pending.get(setting.cvar) ~= nil then
 					return false
 				end
 			else
@@ -156,10 +157,10 @@ function Pending.applyPreset(presetKey)
 		end
 		return
 	end
-	if not isEmpty(values) and Pending.activePreset() == "custom" then
-		lastCustom = copy(values)
+	if Pending.count() > 0 and Pending.activePreset() == "custom" then
+		lastCustom = copy(picks)
 	end
-	values = {}
+	picks = {}
 	for _, setting in ipairs(ns.Settings) do
 		if Store.status(setting.cvar) == "available" then
 			local target = Pending.presetValue(setting, presetKey)
@@ -171,14 +172,16 @@ function Pending.applyPreset(presetKey)
 	ns.emit("PENDING_CHANGED")
 end
 
--- Pending entries that differ from live, as { cvar, value } in apply order.
+-- Every pick as { cvar, value } in apply order, or an empty list when none
+-- differs from live. Picks that match live ride along so a parent cannot
+-- undo them; Store.transaction skips them unless a parent moved them.
 function Pending.changes()
+	if Pending.count() == 0 then
+		return {}
+	end
 	local list = {}
-	for cvar, value in pairs(values) do
-		local live = Store.get(cvar)
-		if live == nil or not Store.near(live, value) then
-			table.insert(list, { cvar = cvar, value = value })
-		end
+	for cvar, value in pairs(picks) do
+		table.insert(list, { cvar = cvar, value = value })
 	end
 	return Store.sortByTier(list)
 end

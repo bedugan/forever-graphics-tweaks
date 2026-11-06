@@ -80,15 +80,14 @@ function Store.sortByTier(list)
 	return list
 end
 
--- Writes target values (cvar -> number) where they differ from `current`,
--- tier 1 first. Skips any cvar not in `allowed` when that set is given.
--- Returns the list of write records { cvar, requested, result, actual, message }.
-local function writeValues(targets, allowed)
+-- Writes target values (cvar -> number), tier 1 first. Compares with the
+-- live value just before each write, because a tier 1 write rewrites its
+-- children. Returns the list of write records
+-- { cvar, requested, result, actual, message }.
+local function writeValues(targets)
 	local list = {}
 	for cvar, value in pairs(targets) do
-		if allowed == nil or allowed[cvar] then
-			table.insert(list, { cvar = cvar, requested = value })
-		end
+		table.insert(list, { cvar = cvar, requested = value })
 	end
 	Store.sortByTier(list)
 	local records = {}
@@ -106,8 +105,9 @@ local function writeValues(targets, allowed)
 end
 Store.writeValues = writeValues
 
--- Applies changes as one unit. On any error or rejection, puts every
--- managed value back to `snapshot` and reports failure.
+-- Applies changes as one unit, skipping values already live at their turn.
+-- On any error or rejection, puts every managed value back to `snapshot`
+-- and reports failure.
 -- changes: list of { cvar, value }. snapshot: cvar -> number.
 -- Returns ok, records, failedRecord, rollbackRecords.
 function Store.transaction(changes, snapshot)
@@ -119,15 +119,18 @@ function Store.transaction(changes, snapshot)
 
 	local records = {}
 	for _, item in ipairs(list) do
-		local result, actual, message = Store.set(item.cvar, item.value)
-		local record = {
-			cvar = item.cvar, requested = item.value,
-			result = result, actual = actual, message = message,
-		}
-		table.insert(records, record)
-		if result == "error" or result == "rejected" then
-			local rollback = writeValues(snapshot)
-			return false, records, record, rollback
+		local live = Store.get(item.cvar)
+		if live == nil or not near(live, item.value) then
+			local result, actual, message = Store.set(item.cvar, item.value)
+			local record = {
+				cvar = item.cvar, requested = item.value,
+				result = result, actual = actual, message = message,
+			}
+			table.insert(records, record)
+			if result == "error" or result == "rejected" then
+				local rollback = writeValues(snapshot)
+				return false, records, record, rollback
+			end
 		end
 	end
 	return true, records

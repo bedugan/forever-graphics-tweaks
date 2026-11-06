@@ -34,7 +34,7 @@ The script starts a Lua 5.1 container (Docker, or Colima's containerd through `c
 
 | Date | Commit | Result |
 | --- | --- | --- |
-| 2026-11-06 | `feat/m1-m5-prototype` | 65 passed, 0 failed |
+| 2026-11-06 | `feat/m1-m5-prototype` | 70 passed, 0 failed |
 
 ### What the fakes cannot tell us
 

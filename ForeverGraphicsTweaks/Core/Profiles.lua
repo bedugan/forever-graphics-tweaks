@@ -61,19 +61,18 @@ function Profiles.restoreOriginal()
 	if not baseline then
 		return false, "Nothing to restore. FGT has not changed any settings yet."
 	end
+	-- Pass every baseline value, not only the ones that differ now: a
+	-- restored quality-level parent rewrites children that already matched.
 	local changes = {}
 	for cvar, value in pairs(baseline.values) do
 		if ns.SettingsByKey[cvar] and Store.status(cvar) == "available" then
-			local live = Store.get(cvar)
-			if live == nil or not Store.near(live, value) then
-				table.insert(changes, { cvar = cvar, value = value })
-			end
+			table.insert(changes, { cvar = cvar, value = value })
 		end
 	end
-	if #changes == 0 then
+	local ok, records, failed = Store.transaction(changes, Store.readAll())
+	if ok and #records == 0 then
 		return true, "Settings already match the original values.", {}
 	end
-	local ok, records, failed = Store.transaction(changes, Store.readAll())
 	if not ok then
 		return false, ns.SettingsByKey[failed.cvar].label .. " could not be restored. Nothing was changed.", records
 	end
