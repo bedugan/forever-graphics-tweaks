@@ -59,6 +59,16 @@ test("manual edit turns the preset into custom, and custom brings edits back", f
 	eq(ns.Pending.get("groundEffectDensity"), 96)
 end)
 
+test("choosing custom while already custom keeps the current edits", function()
+	local ns = newAddon()
+	ns.Pending.set("groundEffectDensity", 96)
+	ns.Pending.applyPreset("ultra")
+	ns.Pending.applyPreset("custom")
+	ns.Pending.set("groundEffectDensity", 200)
+	ns.Pending.applyPreset("custom")
+	eq(ns.Pending.get("groundEffectDensity"), 200)
+end)
+
 test("unavailable settings are skipped by presets", function()
 	local ns = newAddon({ missing = set({ "reflectionMode" }) })
 	ns.Pending.applyPreset("ultra")

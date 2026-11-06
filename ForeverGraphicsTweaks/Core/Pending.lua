@@ -147,10 +147,11 @@ function Pending.hasCustom()
 end
 
 -- Fills pending values from a preset. "custom" brings back the manual edits
--- that the last preset choice replaced.
+-- that the last preset choice replaced, unless the current values are
+-- already custom edits.
 function Pending.applyPreset(presetKey)
 	if presetKey == "custom" then
-		if lastCustom then
+		if lastCustom and Pending.activePreset() ~= "custom" then
 			Pending.load(lastCustom)
 		end
 		return
