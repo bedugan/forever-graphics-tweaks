@@ -1,6 +1,6 @@
 # Compatibility
 
-What FGT relies on, where each fact came from, and what still needs testing inside the game.
+What GSM relies on, where each fact came from, and what still needs testing inside the game.
 
 ## Target
 
@@ -19,7 +19,7 @@ What FGT relies on, where each fact came from, and what still needs testing insi
 
 ## APIs
 
-| API | Use in FGT | Evidence | In-game |
+| API | Use in GSM | Evidence | In-game |
 | --- | --- | --- | --- |
 | `C_CVar.GetCVar(name)` | Read live values | Source | Pending |
 | `C_CVar.GetCVarDefault(name)` | Default preset | Source | Pending |
@@ -34,18 +34,18 @@ What FGT relies on, where each fact came from, and what still needs testing insi
 | `ReloadUI` | Never called | Protected on Forever | n/a |
 | `GetTime` | Preview clock | Source | Pending |
 | `GetBuildInfo` | Diagnostics | Source | Pending |
-| `UISpecialFrames` | Esc closes the FGT window | Source | Pending |
+| `UISpecialFrames` | Esc closes the GSM window | Source | Pending |
 | `EnableGamePadButton`, `OnGamePadButtonDown` | Controller Keep and Revert on the overlay | Source | Pending |
 
 ## SavedVariables
 
-- `ForeverGraphicsTweaksDB` holds the baseline, profiles, the preview journal, window position, and a load counter.
-- Early Forever beta builds had reports of SavedVariables not loading. Not verified on 70790. `/fgt diag` shows the load counter. If it stays at 1 after a reload, persistence is broken.
+- `GraphicsSettingsManagerDB` holds the baseline, profiles, window position, and a load counter.
+- Early Forever beta builds had reports of SavedVariables not loading. Not verified on 70790. `/gsm diag` shows the load counter. If it stays at 1 after a reload, persistence is broken.
 
 ## Textures
 
-- FGT 0.1.0 ships no image files. Schematics use `SetColorTexture` and `CreateLine`.
-- For future screenshots: TGA, 32-bit, power-of-two sides (for example 512 by 256). BLP also works. PNG support is not verified on Forever, so FGT does not rely on it.
+- GSM 0.1.0 ships no image files. Schematics use `SetColorTexture` and `CreateLine`.
+- For future screenshots: TGA, 32-bit, power-of-two sides (for example 512 by 256). BLP also works. PNG support is not verified on Forever, so GSM does not rely on it.
 
 ## CVars
 
@@ -66,7 +66,7 @@ Per-setting detail is in [SETTINGS.md](SETTINGS.md). Summary:
 
 ## Known limitations
 
-- Blizzard's quality sliders rewrite raw CVars. If the user moves one after an FGT change, FGT's value is gone, and FGT does not put it back.
+- Blizzard's quality sliders rewrite raw CVars. If the user moves one after a GSM change, GSM's value is gone, and GSM does not put it back.
 - Raid graphics CVars are not managed.
 - Crash recovery is best effort (ADR 0002).
 - Ground and terrain changes may need camera movement or a zone change to show.
