@@ -37,6 +37,7 @@ The script starts a Lua 5.1 container (Docker, or Colima's containerd through `c
 | --- | --- | --- |
 | 2026-11-06 | `feat/m1-m5-prototype` | 70 passed, 0 failed |
 | 2026-11-06 | `feat/capture-companion` | 85 passed, 0 failed. Import: 11 passed |
+| 2026-11-07 | `fix/capture-feedback` | 90 passed, 0 failed. Import: 12 passed |
 
 ### Import tests
 
@@ -56,6 +57,8 @@ The script starts a Lua 5.1 container (Docker, or Colima's containerd through `c
 Run this on the Forever client with only GSM and BugSack enabled. BugSack catches Lua errors and "action blocked" messages that the default UI can hide. Record the client build from `/gsm diag` with each run.
 
 Status values: Not run, Pass, Fail (link an issue), Blocked.
+
+On 2026-11-07, Brian reported that Keep, Revert, the 15-second timeout, Restore original, and profile persistence after restarting the Forever client all passed. The exact build, OS, and package revision were not supplied with that confirmation. This supports a 0.1.0 Beta. It does not complete the full checklist or establish the reload counter and baseline persistence checks. The specific results are recorded below without extending them to unreported cases.
 
 Before starting, write down your own values for a few settings (`/gsm diag` prints them). The restore checks need a known starting point that is not the game default.
 
@@ -90,9 +93,9 @@ Start with one setting, Texture filtering, before testing presets.
 | --- | --- | --- | --- | --- |
 | 3.1 | Pending only | Change Texture filtering in GSM | Pending column shows the new value. `/gsm diag` shows the old live value | Not run |
 | 3.2 | Test hides GSM | Click Test settings | GSM window hides. Overlay shows with a countdown from 15. No Lua error | Not run |
-| 3.3 | Keep | Click Keep settings | Overlay closes, window stays closed, value stays after 20 seconds | Not run |
-| 3.4 | Manual revert | Test again, click Revert | Old value back. GSM window reopens with the pending value still set | Not run |
-| 3.5 | Timeout | Test again, wait | At 0 the old value comes back and the window reopens | Not run |
+| 3.3 | Keep | Click Keep settings | Overlay closes, window stays closed, value stays after 20 seconds | Pass, owner-reported 2026-11-07 |
+| 3.4 | Manual revert | Test again, click Revert | Old value back. GSM window reopens with the pending value still set | Pass, owner-reported 2026-11-07 |
+| 3.5 | Timeout | Test again, wait | At 0 the old value comes back and the window reopens | Pass, owner-reported 2026-11-07 |
 | 3.6 | Keyboard | Test, press Enter. Test, press Esc | Enter keeps, Esc reverts. Esc does not also open the game menu | Not run |
 | 3.7 | Other keys pass through | Test, then move with WASD | Character moves. Countdown keeps going | Not run |
 | 3.8 | Hidden UI | Test, press Alt+Z, wait 15 seconds, press Alt+Z | The timeout still reverted | Not run |
@@ -111,7 +114,7 @@ Start with one setting, Texture filtering, before testing presets.
 | 4.5 | Each setting | For every setting, test Low and High in a busy outdoor zone | The described change is visible. Note timing. Record findings in `docs/SETTINGS.md` | Not run |
 | 4.6 | Delayed settings | Test grass density, turn the camera | Change appears as the ground reloads. Overlay hint mentions it | Not run |
 | 4.7 | Quality parents | Test View distance level with Terrain detail distance pending | Terrain detail distance ends at the pending value, not the one the parent set | Not run |
-| 4.8 | Restore original | Keep Ultra, click Restore original, confirm | Your own pre-GSM values come back, not game defaults | Not run |
+| 4.8 | Restore original | Keep Ultra, click Restore original, confirm | Your own pre-GSM values come back, not game defaults | Pass, owner-reported 2026-11-07 |
 | 4.9 | Restore asks first | Click Restore original, then Cancel | Nothing changes | Not run |
 | 4.10 | Blizzard panel change | Keep Ultra, move a Blizzard graphics slider | GSM does not change it back later | Not run |
 
@@ -130,7 +133,7 @@ Start with one setting, Texture filtering, before testing presets.
 | 6.1 | Save profile | Profiles, type "Mac Balanced", Save | Listed | Not run |
 | 6.2 | Load profile | Discard, load the profile | Pending values fill. Nothing changes until Test | Not run |
 | 6.3 | Reload persistence | `/reload`, `/gsm diag` | Load counter went up by one. Profiles and baseline still there | Not run |
-| 6.4 | Restart persistence | Quit the game normally, start again | Same as 6.3 | Not run |
+| 6.4 | Restart persistence | Quit the game normally, start again | Same as 6.3 | Partial. Profile persistence passed, owner-reported 2026-11-07. Load counter and baseline not separately reported |
 | 6.5 | Logout during test | Test, then `/reload` before the timer ends | After reload the old values are live | Not run |
 | 6.6 | Combat | Open GSM, enter combat | Window closes. `/gsm` refuses in combat. Test refuses in combat | Not run |
 | 6.7 | Combat during test | Test, then enter combat | Overlay buttons still work with the mouse. Timeout still reverts | Not run |
@@ -145,18 +148,23 @@ Enable `GraphicsSettingsManager_Capture` for these. See [GRAPHICS_ASSETS.md](GRA
 
 | # | Check | Steps | Expected | Status |
 | --- | --- | --- | --- | --- |
-| 7.1 | List | `/gsmcap list` | Each setting with its status and three values | Not run |
-| 7.2 | Hide UI | `/gsmcap groundEffectDensity` | The interface hides, or chat asks for Alt+Z. The caption band shows at the bottom | Not run |
-| 7.3 | Shots | Let it finish | Four screenshot files, each with the band naming the shot. Chat says "Done: 4 screenshots." | Not run |
-| 7.4 | Restore | `/gsm diag` before and after | Every value matches the before list | Not run |
-| 7.5 | Esc | Start a run, press Esc | Stops, settings back, band gone | Not run |
-| 7.6 | Move | Start a run, press a movement key | Stops, settings back | Not run |
-| 7.7 | Quality parent | `/gsmcap graphicsGroundClutter` | Grass changes across Low, Medium, High. Settings back afterwards | Not run |
-| 7.8 | Log | `/reload`, then `scripts/import_captures.sh` | It finds the log and files and writes the review page | Not run |
-| 7.9 | Crops | Open `.capture/review.html` | The crop sits on the grass, not on water or the sky | Not run |
+| 7.1 | List | `/gsmcap list` | Each setting with its status and three values | Pass. All 16 settings available with three values |
+| 7.2 | Hide UI | `/gsmcap groundEffectDensity` | The interface hides, or chat asks for Alt+Z. The caption band shows at the bottom | Pass. Hid by itself every run |
+| 7.3 | Shots | Let it finish | Four screenshot files, each with the band naming the shot. Chat says "Done: 4 screenshots." | Pass. 96 PNG files over 15 runs, each with the band |
+| 7.4 | Restore | `/gsm diag` before and after | Every value matches the before list | Pass |
+| 7.5 | Esc | Start a run, press Esc | Stops, settings back, band gone | Pass. Stopped the run; restore not checked with `/gsm diag` |
+| 7.6 | Move | Start a run, press a movement key | Stops, settings back | Pass. Logged as "you moved" after one shot |
+| 7.7 | Quality parent | `/gsmcap graphicsGroundClutter` | Grass changes across Low, Medium, High. Settings back afterwards | Pass. Grass and plants fill in across the three levels, and `/gsm diag` matched afterwards |
+| 7.8 | Log | `/reload`, then `scripts/import_captures.sh` | It finds the log and files and writes the review page | Pass after a fix. The first import missed one file saved 3 seconds before its log entry |
+| 7.9 | Crops | Open `.capture/review.html` | The crop sits on the grass, not on water or the sky | Mixed. Session 3 at 100% render scale: 8 of 11 crops land on the change by themselves. Reflections and object fade needed a manual crop, and object culling uses the session 1 set. Grass fade start, texture filtering, and both sharpening settings show no visible change at panel size and keep their schematics |
+| 7.10 | Limits | Set grass fade start to 280, then `/gsmcap groundEffectDist` | Chat says the setting was dropped and why. No run starts | Pass. On Balanced, chat said grass fade start (280) blocked it and "Nothing left to capture." No run started |
+| 7.11 | Render scale | Set render scale below 100%, then `/gsmcap groundEffectDensity` | Chat says the render scale and asks for 100%. No run starts | Pass. At 50%, chat said "Render scale is 50%. Set it to 100% in Options > Graphics first." No run started |
 
 ### Run log
 
 | Date | Build | Tester | Checks run | Notes |
 | --- | --- | --- | --- | --- |
-| | | | | |
+| 2026-11-07 | 1.60.1.70790 | Brian, macOS | 7.2, 7.3, 7.5, 7.8, 7.9 | No Lua errors in BugSack. The 6 second wait for background settings felt too long (now 3). `/gsmcap groundEffectDist` with grass fade start at 280 silently skipped Low, Medium, and the control, which led to 7.10. Several settings showed little visible change |
+| 2026-11-07 | 1.60.1.70790 | Brian, macOS | 7.4, 7.6, recapture | Zephras Isle. Mismatched install (old GSM, new companion) made `/gsmcap` fail silently, fixed with a clear refusal. The long view now shows distant buildings appear. Grass fade start shows no clear change in its scene, and a walking bird pulled its automatic crop. Water reflections and grass fade start use manual crops |
+| 2026-11-07 | 1.60.1.70790 | Brian, macOS | 7.1, 7.4, 7.7, 7.10, 7.11, full recapture | Zephras Isle at 100% render scale. Sessions 1 and 2 had run at the Mac's default 50%, which blurred fine detail. `/gsm diag` matched before and after. Water reflections look weak on the Mac and may be redone on SteamOS. |
+| 2026-11-07 | Not supplied | Brian, owner report | 3.3, 3.4, 3.5, 4.8, profile portion of 6.4 | Confirmed all five checks passed in the publication conversation. Exact OS and package revision not supplied. Remaining rows retain their prior status |

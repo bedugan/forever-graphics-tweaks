@@ -6,7 +6,7 @@
 #   scripts/import_captures.sh --test            run the import's own tests
 #
 # --wow defaults to the macOS Forever install. The script only reads the WoW
-# folders: it copies the capture log and that run's screenshots into
+# folders: it copies the capture log and the screenshots from the days of the run (or all runs) into
 # .capture/in (ignored by git), and the container sees only this repo.
 # Needs Docker or Colima.
 set -eu

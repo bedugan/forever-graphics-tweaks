@@ -33,9 +33,12 @@ ns.Categories = {
 	{ key = "effects", label = "Other enhancements" },
 }
 
+-- Balanced is "best value": the lowest setting that looked different from the
+-- game default in the 2026-11-07 captures (docs/adr/0008). Where the
+-- default already looked as good as higher values, Balanced leaves it alone.
 ns.Presets = {
 	{ key = "default", label = "Default", tip = "The client's native defaults, read from the game. Not your saved original settings." },
-	{ key = "balanced", label = "Balanced", tip = "More detail without the most expensive options." },
+	{ key = "balanced", label = "Balanced", tip = "The smallest changes from the game's defaults that made a visible difference in test screenshots." },
 	{ key = "ultra", label = "Ultra", tip = "Favors detail and draw distance. Expect a larger frame rate cost." },
 	{ key = "custom", label = "Custom", tip = "Your own adjustments." },
 }
@@ -47,21 +50,21 @@ ns.Settings = {
 	{
 		cvar = "graphicsViewDistance", label = "View distance level", category = "quality",
 		kind = "slider", min = 0, max = 9, step = 1, format = 1, tier = 1,
-		presets = { balanced = 7, ultra = 9 },
+		presets = { ultra = 9 },
 		impact = "high", timing = "immediate", visual = "distance", evidence = "source",
 		summary = "How far the world is drawn. " .. QUALITY_LEVEL,
 	},
 	{
 		cvar = "graphicsEnvironmentDetail", label = "Environment detail level", category = "quality",
 		kind = "slider", min = 0, max = 9, step = 1, format = 1, tier = 1,
-		presets = { balanced = 7, ultra = 9 },
+		presets = { ultra = 9 },
 		impact = "medium", timing = "immediate", visual = "lod", evidence = "source",
 		summary = "Detail of buildings, trees, and props. " .. QUALITY_LEVEL,
 	},
 	{
 		cvar = "graphicsGroundClutter", label = "Ground clutter level", category = "quality",
 		kind = "slider", min = 0, max = 9, step = 1, format = 1, tier = 1,
-		presets = { balanced = 7, ultra = 9 },
+		presets = { ultra = 9 },
 		impact = "medium", timing = "delayed", visual = "density", evidence = "source",
 		summary = "Amount and reach of grass and small ground plants. " .. QUALITY_LEVEL,
 	},
@@ -77,14 +80,14 @@ ns.Settings = {
 	{
 		cvar = "groundEffectDist", label = "Grass draw distance", category = "vegetation",
 		kind = "slider", min = 40, max = 500, step = 10, tier = 2,
-		presets = { balanced = 320, ultra = 450 },
+		presets = { balanced = 270, ultra = 450 },
 		impact = "medium", timing = "delayed", visual = "distance", evidence = "wiki",
 		summary = "Distance in yards at which grass stops being drawn.",
 	},
 	{
 		cvar = "groundEffectFade", label = "Grass fade start", category = "vegetation",
 		kind = "slider", min = 40, max = 500, step = 10, tier = 2, atMost = "groundEffectDist",
-		presets = { balanced = 280, ultra = 400 },
+		presets = { balanced = 230, ultra = 400 },
 		impact = "low", timing = "delayed", visual = "distance", evidence = "wiki",
 		summary = "Distance where grass starts fading out. Must not exceed grass draw distance.",
 	},
@@ -100,14 +103,14 @@ ns.Settings = {
 	{
 		cvar = "lodObjectCullSize", label = "Small object culling", category = "detail",
 		kind = "slider", min = 4, max = 30, step = 1, reverse = true, tier = 2,
-		presets = { balanced = 12, ultra = 8 },
+		presets = { ultra = 8 },
 		impact = "medium", timing = "immediate", visual = "lod", evidence = "wiki",
 		summary = "Objects smaller than this on screen get hidden. Lower values keep more small objects, so the slider runs right to left.",
 	},
 	{
 		cvar = "terrainLodDist", label = "Terrain detail distance", category = "detail",
 		kind = "slider", min = 200, max = 1500, step = 25, tier = 2,
-		presets = { balanced = 650, ultra = 1000 },
+		presets = { ultra = 1000 },
 		impact = "medium", timing = "delayed", visual = "terrain", evidence = "wiki",
 		summary = "Distance at which terrain switches to its simpler shape. Higher keeps hills and cliffs detailed further out.",
 	},
@@ -123,7 +126,7 @@ ns.Settings = {
 	{
 		cvar = "ResampleAlwaysSharpen", label = "Always sharpen", category = "image",
 		kind = "toggle", min = 0, max = 1, step = 1, tier = 2,
-		presets = { balanced = 1, ultra = 1 },
+		presets = { ultra = 1 },
 		impact = "low", timing = "immediate", visual = "clarity", evidence = "wiki",
 		summary = "Applies the sharpening pass even at 100% render scale. Needed for Sharpness to have an effect without FSR.",
 	},
@@ -138,7 +141,7 @@ ns.Settings = {
 		cvar = "textureFilteringMode", label = "Texture filtering", category = "image",
 		kind = "choice", min = 0, max = 5, step = 1, tier = 2,
 		choices = { "Bilinear", "Trilinear", "2x anisotropic", "4x anisotropic", "8x anisotropic", "16x anisotropic" },
-		presets = { balanced = 4, ultra = 5 },
+		presets = { ultra = 5 },
 		impact = "low", timing = "immediate", visual = "filtering", evidence = "source",
 		summary = "Keeps ground and wall textures crisp at steep viewing angles.",
 	},
@@ -154,7 +157,7 @@ ns.Settings = {
 	{
 		cvar = "shadowNumCascades", label = "Shadow cascades", category = "effects",
 		kind = "slider", min = 1, max = 4, step = 1, tier = 2,
-		presets = { ultra = 4 },
+		presets = { balanced = 3, ultra = 4 },
 		impact = "medium", timing = "immediate", visual = "shadows", evidence = "wiki",
 		summary = "Number of shadow detail bands. More bands keep distant shadows sharper. Blizzard's shadow quality setting can reset this.",
 	},

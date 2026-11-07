@@ -28,7 +28,7 @@ Three choices came up:
 
 ## Consequences
 
-- Capturing one setting takes about 15 to 35 seconds of standing still, and a human only checks the review page.
+- Capturing one setting takes about 15 to 25 seconds of standing still, and a human only checks the review page. The first in-game session (2026-11-07) used a 6 second wait for background settings, which felt too long, so it is now 3.
 - Nothing locks the camera. If the player moves it during a run, the shots are wasted. The import cannot tell, apart from a large control difference.
 - `SetUIVisibility`, `SetPropagateKeyboardInput`, and `Screenshot()` are unverified on Forever. The companion falls back to asking for Alt+Z.
 - The import needs Docker or Colima, the same as the Lua tests.

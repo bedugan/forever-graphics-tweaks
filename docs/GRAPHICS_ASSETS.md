@@ -37,6 +37,8 @@ On SteamOS, move the folder with Syncthing, the same way as the main addon.
 ## Capture
 
 1. Set the game's screenshot format to PNG or TGA if you can (`/console screenshotFormat png`). JPEG adds noise that the import has to look past. The companion records the format but does not change it.
+
+   Set Render Scale to 100% in Options > Graphics. Below that, the game draws the world smaller and stretches it, so fine detail blurs. On a Retina Mac it starts at 50%. `/gsmcap` refuses to start below 100% and never changes it for you.
 2. Pick a scene where the setting is easy to see:
 
    | Setting | Scene |
@@ -52,10 +54,10 @@ On SteamOS, move the folder with Syncthing, the same way as the main addon.
 3. Dismount, stand still, and set the camera. Nothing can lock the camera, so do not touch the mouse or keys until the run ends.
 4. Type `/gsmcap <cvar>` for one or more settings, for example `/gsmcap groundEffectDensity groundEffectDist`. `/gsmcap all` runs every setting that can be tested. The chat line says how long it will take.
 5. The companion hides the interface. If the game does not allow that, press Alt+Z when asked. The run starts once the interface is hidden.
-6. Wait. Each setting takes 4 shots, 2 seconds apart for instant settings and 6 seconds for ones that load in the background.
+6. Wait. Each setting takes 4 shots. The companion waits 2 seconds after an instant change and 3 seconds after one that loads in the background, plus the time the game takes to save each file.
 7. When it says "Done", press Alt+Z if the interface is still hidden, then `/reload`. The game writes the log only on reload or logout.
 
-A shot that would break one of GSM's limits is skipped, not forced. Grass fade start must not exceed grass draw distance. So before capturing grass draw distance, set grass fade start to 40 with GSM. Before capturing grass fade start, set grass draw distance to 500.
+The companion checks every level before it starts. If one would break a GSM limit, it drops that setting and says why in chat, rather than shooting a partial set. Grass fade start must not exceed grass draw distance. So before capturing grass draw distance, set grass fade start to 40 with GSM. Before capturing grass fade start, set grass draw distance to 500. A shot that still fails during the run is skipped, and chat names it.
 
 The run stops and puts every setting back if you press Esc, move, enter combat, hit a loading screen, or log out. `/gsmcap stop` does the same.
 
@@ -79,7 +81,7 @@ It needs Docker or Colima. The first run builds a small Python image. Options:
 | --- | --- |
 | `--wow DIR` | The `_forever_` folder. Defaults to `/Applications/World of Warcraft/_forever_` |
 | `--log FILE --screens DIR` | Point at a capture log and screenshot folder directly, for example a Syncthing folder from a SteamOS machine |
-| `--run N` | Which run in the log. Defaults to the newest |
+| `--run N` | Import only this run. Without it, each setting comes from the newest run that has its Low, Medium, and High shots, so you can capture several scenes in one session and import once |
 | `--only cvar,cvar` | Import only these settings |
 | `--manifest-only` | Rebuild `Media/Manifest.lua` from `assets/screenshots.json` without new shots |
 | `--test` | Run the import's own tests |
@@ -88,7 +90,7 @@ The script only reads the WoW folders. It copies the log and that day's screensh
 
 For each setting it:
 
-1. Matches each logged shot to the screenshot file taken within 2 seconds of it.
+1. Matches each logged shot to the nearest screenshot file from 5 seconds before it to 1 second after. The file name is the time of the request, and the log entry is written once the game has saved the file, which takes a few seconds for a large PNG.
 2. Cuts off the caption band.
 3. Builds a change map: how much each area differs between Low, Medium, and High, minus anything that also differs between Low and the control.
 4. Picks the smallest crop, at the panel's 390 by 140 shape, that holds 70% of the change. The crop is never narrower than 512 screen pixels, so nothing gets scaled up.
@@ -96,7 +98,7 @@ For each setting it:
 6. Writes `Media/Shots/<cvar>_<level>.tga` (512 by 256, the picture in the top 512 by 184), `assets/screenshots.json`, and `Media/Manifest.lua`.
 7. Writes `.capture/review.html`, which shows each full frame with the crop marked, the change map, and the three panel views.
 
-It reports missing shots, a missing control, size mismatches, settings the client clamped to the same value at two levels, and settings the companion skipped.
+It reports missing shots, a missing control, size mismatches, settings the client clamped to the same value at two levels, and settings with no complete set in any run, with the reason the companion logged.
 
 ## Review
 

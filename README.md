@@ -2,7 +2,7 @@
 
 A World of Warcraft: Forever addon for trying advanced graphics settings without the risk. Pick a preset or adjust a setting, click Test settings, and look at the game. You have 15 seconds to keep the change. If you do nothing, it goes back.
 
-> **Pre-release (0.1.0).** The code is complete and passes its automated tests, but nothing has been checked inside the Forever client yet. Every setting is marked unverified. Version 1.0 waits for the in-game checklist in [docs/TESTING.md](docs/TESTING.md).
+> **Pre-release (0.1.0).** The code passes its automated tests. Several checks have passed inside the Forever client on macOS, including Keep, Revert, the timeout, and Restore original. The rest of the in-game checklist, and SteamOS and Windows, are still open. Version 1.0 waits for them. See [docs/TESTING.md](docs/TESTING.md).
 
 Target: Forever (Camelot) 1.60.1, interface 16001.
 
@@ -10,7 +10,7 @@ Target: Forever (Camelot) 1.60.1, interface 16001.
 
 - Four presets: Default (the game's own defaults), Balanced, Ultra, and Custom (your edits).
 - 16 settings in five groups, each with a plain description, the current and pending value, an estimated performance cost, and when the change shows up. Details in [docs/SETTINGS.md](docs/SETTINGS.md).
-- A Low, Medium, High comparison panel for every setting. 0.1.0 shows labeled schematic drawings. Real screenshots can be added later ([docs/GRAPHICS_ASSETS.md](docs/GRAPHICS_ASSETS.md)).
+- A Low, Medium, High comparison panel for every setting. 11 settings show screenshots taken in the Forever client. The other 5 show labeled schematic drawings, because their change is too small to see in the panel ([docs/GRAPHICS_ASSETS.md](docs/GRAPHICS_ASSETS.md)).
 - A safe test. GSM records the current values, applies the new ones, reads them back, closes its window, and shows a small Keep or Revert box with a 15 second countdown. Timeout reverts. If any value fails to apply, GSM undoes the rest and tells you.
 - Restore original puts back the settings you had before GSM first changed anything. It asks first.
 - Named profiles, such as "Mac Balanced" or "SteamOS Ultra". Loading one only fills pending values.

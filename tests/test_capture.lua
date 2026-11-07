@@ -243,7 +243,8 @@ local function newCapture(opts)
 	GetRealZoneText = function() return "Elwynn Forest" end
 	GetSubZoneText = function() return "Goldshire" end
 	IsPlayerMoving = function() return env.moving end
-	C_CVar = { GetCVar = function() return "jpeg" end }
+	env.renderScale = opts.renderScale or "1"
+	C_CVar = { GetCVar = function(name) return name == "RenderScale" and env.renderScale or "jpeg" end }
 	Screenshot = function() env.shots = env.shots + 1 end
 	SetUIVisibility = function(show)
 		if opts.uiLocked then
@@ -301,6 +302,43 @@ test("gsmcap: one setting runs four shots, logs them, and puts everything back",
 	for cvar, value in pairs(before) do
 		eq(env.cvars.value(cvar), value, cvar)
 	end
+end)
+
+test("gsmcap: a setting with a level over a live limit is dropped before the run, with a reason", function()
+	local _, env = newCapture()
+	env.cap("groundEffectFade")
+	eq(GraphicsSettingsManagerCaptureDB, nil, "no run is logged")
+	truthy(env.chat[#env.chat - 1]:find("Skipping Grass fade start. .*Grass draw distance"), env.chat[#env.chat - 1])
+	truthy(env.chat[#env.chat]:find("Nothing left to capture"))
+	eq(UIParent:IsShown(), true)
+
+	env.cap("groundEffectFade groundEffectDensity")
+	env.shoot(4)
+	local run = GraphicsSettingsManagerCaptureDB.runs[1]
+	eq(run.result, "done")
+	eq(#run.shots, 4)
+	eq(run.shots[1].cvar, "groundEffectDensity")
+	eq(run.labels.groundEffectFade, nil)
+end)
+
+test("gsmcap: an older GSM without check is refused with a clear message", function()
+	local gsm, env = newCapture()
+	gsm.API.check = nil
+	env.cap("groundEffectDensity")
+	eq(GraphicsSettingsManagerCaptureDB, nil, "no run is logged")
+	truthy(env.chat[#env.chat]:find("newer GraphicsSettingsManager"))
+end)
+
+test("gsmcap: a render scale below 100% is refused before anything changes", function()
+	local gsm, env = newCapture({ renderScale = "0.5" })
+	local before = gsm.CVarStore.readAll()
+	env.cap("groundEffectDensity")
+	eq(GraphicsSettingsManagerCaptureDB, nil, "no run is logged")
+	truthy(env.chat[#env.chat]:find("Render scale is 50%%"))
+	for cvar, value in pairs(before) do
+		eq(env.cvars.value(cvar), value, cvar)
+	end
+	truthy(UIParent:IsShown())
 end)
 
 test("gsmcap: Esc, movement, and combat stop the run and restore", function()

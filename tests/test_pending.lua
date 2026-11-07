@@ -106,7 +106,7 @@ end)
 
 test("changes are ordered tier 1 first", function()
 	local ns = newAddon()
-	ns.Pending.applyPreset("balanced")
+	ns.Pending.applyPreset("ultra")
 	local changes = ns.Pending.changes()
 	eq(ns.SettingsByKey[changes[1].cvar].tier, 1)
 	eq(ns.SettingsByKey[changes[#changes].cvar].tier, 2)
