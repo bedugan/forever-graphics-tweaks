@@ -6,9 +6,11 @@ CORE_FILES = {
 	"Core/CVarStore.lua",
 	"Core/Experience.lua",
 	"Core/Pending.lua",
+	"Core/Levels.lua",
 	"Core/Profiles.lua",
 	"Core/Preview.lua",
 	"Core/Diagnostics.lua",
+	"Core/Api.lua",
 }
 
 -- Values loosely shaped like a mid-range client. Defaults equal live.
