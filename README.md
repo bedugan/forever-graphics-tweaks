@@ -75,6 +75,7 @@ Commands:
 - `GraphicsSettingsManager/` is the addon. `Core/` has no UI and reaches the game only through `ns.api`, so tests can replace it. `UI/` builds the frames. Every setting and preset value lives in `Core/Definitions.lua`.
 - `scripts/test.sh` runs the Lua 5.1 tests in a container (Docker or Colima). See [docs/TESTING.md](docs/TESTING.md).
 - `scripts/build.sh` builds `dist/GraphicsSettingsManager-<version>.zip`.
+- `GraphicsSettingsManager_Capture/` is a developer-only companion addon that takes the comparison screenshots. `scripts/import_captures.sh` crops them into textures. It is not in the release ZIP. See [docs/GRAPHICS_ASSETS.md](docs/GRAPHICS_ASSETS.md).
 - Design decisions are in [docs/adr/](docs/adr/), terms in [GLOSSARY.md](GLOSSARY.md), API evidence in [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md), and changes in [CHANGELOG.md](CHANGELOG.md).
 
 ## License

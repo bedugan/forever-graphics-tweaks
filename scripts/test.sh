@@ -29,7 +29,7 @@ fi
 
 $RUN --rm -v "$ROOT:/src:ro" -w /src "$IMAGE" sh -c '
 	set -e
-	find GraphicsSettingsManager tests -name "*.lua" | sort | while read -r f; do
+	find GraphicsSettingsManager GraphicsSettingsManager_Capture tests -name "*.lua" | sort | while read -r f; do
 		luac -p "$f" || exit 1
 	done
 	echo "luac -p: all files parse"

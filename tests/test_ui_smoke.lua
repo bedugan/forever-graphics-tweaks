@@ -65,6 +65,11 @@ function Widget:SetValue(value)
 	self:fire("OnValueChanged", self.value, false)
 end
 function Widget:GetValue() return self.value end
+function Widget:SetWidth(width) self.width = width end
+function Widget:SetHeight(height) self.height = height end
+function Widget:GetWidth() return self.width or 0 end
+function Widget:GetHeight() return self.height or 0 end
+function Widget:SetTexCoord(...) self.coords = { ... } end
 function Widget:CreateTexture() return widget("Texture", nil, self) end
 function Widget:CreateFontString() return widget("FontString", nil, self) end
 function Widget:CreateLine() return widget("Line", nil, self) end
@@ -411,3 +416,42 @@ test("ui: missing CVars show as unavailable and cannot be edited", function()
 	find("Ultra"):Click()
 	eq(ns.Pending.get("weatherDensity"), nil)
 end)
+
+test("ui: a packaged screenshot uses its texcoords, focus box, and shot values", function()
+	local ns = newUI()
+	ns.Manifest.groundEffectDensity = {
+		build = "1.60.1.70790", note = "Test scene.",
+		low = "path_low", medium = "path_medium", high = "path_high",
+		coords = { 0, 1, 0, 0.71875 },
+		focus = { 0.25, 0.1, 0.5, 0.4 },
+		values = { low = 16, medium = 136, high = 256 },
+	}
+	ns.MainWindow.show()
+	ns.MainWindow.select("groundEffectDensity")
+	find("High"):Click()
+	local image, example, marks
+	for _, w in ipairs(frames) do
+		if w.kind == "Texture" and w.coords and visible(w) then
+			image = w
+		elseif w.kind == "FontString" and visible(w) and w.text and w.text:find("^High in this shot") then
+			example = w
+		end
+	end
+	truthy(image, "image shown")
+	eq(image.coords[4], 0.71875)
+	truthy(example, "the example line shows the captured value")
+	eq(example.text, "High in this shot: 256")
+	marks = 0
+	for _, w in ipairs(frames) do
+		if w.kind == "Texture" and visible(w) and w.parent == image.parent and w ~= image then
+			marks = marks + 1
+		end
+	end
+	eq(marks, 4, "four sides of the focus box")
+end)
+
+-- Shared with tests/test_capture.lua.
+UI = {
+	new = newUI, fire = fire, update = update, find = find, visible = visible,
+	widget = widget, frames = function() return frames end,
+}

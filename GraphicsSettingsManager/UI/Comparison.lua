@@ -7,8 +7,8 @@ local Comparison = {}
 ns.Comparison = Comparison
 
 local SCHEMATIC = "Schematic illustration, not an in-game screenshot."
-local LEVELS = { "low", "medium", "high" }
-local LEVEL_LABELS = { low = "Low", medium = "Medium", high = "High" }
+local LEVELS = ns.Levels.order
+local LEVEL_LABELS = ns.Levels.labels
 
 local SKY = { 0.32, 0.45, 0.62 }
 local GROUND = { 0.22, 0.32, 0.16 }
@@ -287,30 +287,16 @@ function drawers.weather(c, t)
 	c:label(({ "Light rain", "Moderate rain", "Heavy rain" })[t * 2 + 1], 10, c.h - 16, { 1, 1, 1 })
 end
 
--- Example CVar value for a level, so the tab says what "High" means.
-local function exampleValue(setting, t)
-	local value = setting.min + (setting.max - setting.min) * t
-	if setting.reverse then
-		value = setting.max - (setting.max - setting.min) * t
-	end
-	return ns.Pending.normalize(setting, value)
-end
-
--- Picks the tab closest to a value.
-local function levelFor(setting, value)
-	if value == nil then
-		return "medium"
-	end
-	local t = (value - setting.min) / (setting.max - setting.min)
-	if setting.reverse then
-		t = 1 - t
-	end
-	if t < 1 / 3 then
-		return "low"
-	elseif t < 2 / 3 then
-		return "medium"
-	end
-	return "high"
+-- Outlines the area a screenshot's change is in. focus is { x, y, w, h }
+-- as fractions of the shown image, measured from its top-left corner.
+local function outline(c, focus)
+	local x, w = focus[1] * c.w, focus[3] * c.w
+	local h = focus[4] * c.h
+	local y = c.h - focus[2] * c.h - h
+	c:rect(x, y, w, 2, MARK, 1, "OVERLAY")
+	c:rect(x, y + h - 2, w, 2, MARK, 1, "OVERLAY")
+	c:rect(x, y, 2, h, MARK, 1, "OVERLAY")
+	c:rect(x + w - 2, y, 2, h, MARK, 1, "OVERLAY")
 end
 
 -- Builds the panel. Returns an object with :show(setting, value).
@@ -354,20 +340,25 @@ function Comparison.create(parent, width, height)
 			end
 		end
 		canvas:reset()
-		local t = ({ low = 0, medium = 0.5, high = 1 })[self.level]
 		local shots = ns.Manifest[setting.cvar]
 		local path = shots and shots[self.level]
+		local shown = shots and shots.values and shots.values[self.level]
 		if path then
 			image:SetTexture(path)
+			image:SetTexCoord(unpack(shots.coords or { 0, 1, 0, 1 }))
 			image:Show()
+			if shots.focus then
+				outline(canvas, shots.focus)
+			end
 			caption:SetText("In-game screenshot" .. (shots.build and (", build " .. shots.build) or "") .. ". " .. (shots.note or ""))
 		else
 			image:Hide()
 			local draw = drawers[setting.visual] or drawers.density
-			draw(canvas, t)
+			draw(canvas, ns.Levels.position(self.level))
 			caption:SetText(SCHEMATIC)
 		end
-		example:SetText(LEVEL_LABELS[self.level] .. " example: " .. W.formatValue(setting, exampleValue(setting, t)))
+		local value = shown or ns.Levels.value(setting, self.level)
+		example:SetText(LEVEL_LABELS[self.level] .. (shown and " in this shot: " or " example: ") .. W.formatValue(setting, value))
 	end
 
 	for i, key in ipairs(LEVELS) do
@@ -381,7 +372,7 @@ function Comparison.create(parent, width, height)
 
 	function self:show(setting, value)
 		self.setting = setting
-		self.level = levelFor(setting, value)
+		self.level = ns.Levels.nearest(setting, value)
 		self:render()
 	end
 

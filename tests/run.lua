@@ -52,6 +52,7 @@ local files = {
 	"tests/test_profiles.lua",
 	"tests/test_definitions.lua",
 	"tests/test_ui_smoke.lua",
+	"tests/test_capture.lua",
 }
 for _, file in ipairs(files) do
 	dofile(ROOT .. "/" .. file)

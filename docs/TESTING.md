@@ -28,6 +28,7 @@ The script starts a Lua 5.1 container (Docker, or Colima's containerd through `c
 | `test_preview.lua` | 15 second countdown from elapsed time, not frames. Keep, manual Revert, timeout, and logout. Revert restores the exact snapshot and skips values something else changed. Partial apply failures roll back. Combat and empty tests are refused |
 | `test_profiles.lua` | Baseline captured on first write only. Restore Original. Profile save, load, delete, and name rules. Loading a profile writes nothing |
 | `test_definitions.lua` | Every definition is complete and its preset values are in range and on step. `SSAOType` is not managed. Loading Core writes nothing. Diagnostics is read-only |
+| `test_capture.lua` | The capture runner's settle, shoot, skip, timeout, and stop. The plan's shot order, control shot, and snapshot restore before every shot. GSM's public API checks. `/gsmcap` start to finish, Esc, moving, combat, the Alt+Z wait, refusals, and logout, with every setting put back |
 | `test_ui_smoke.lua` | Loads every file in TOC order against a fake frame API, then clicks through the window, presets, Test, the overlay, Keep, Revert, timeout, keyboard and gamepad keys, the Classic warning, combat, profiles, Restore Original, the Settings launcher, and every comparison panel |
 
 ### Latest result
@@ -35,6 +36,11 @@ The script starts a Lua 5.1 container (Docker, or Colima's containerd through `c
 | Date | Commit | Result |
 | --- | --- | --- |
 | 2026-11-06 | `feat/m1-m5-prototype` | 70 passed, 0 failed |
+| 2026-11-06 | `feat/capture-companion` | 85 passed, 0 failed. Import: 11 passed |
+
+### Import tests
+
+`scripts/import_captures.sh --test` runs `scripts/capture/test_gsm_import.py` in the Python container. It builds synthetic 1920 by 1080 scenes, not real screenshots: a patch of grass specks that grows with the level, and a patch of random noise that changes every shot like water. The tests check that the crop holds the grass and skips the noise, keeps the panel's shape, never drops below 512 pixels wide, cuts off the caption band, reports no change for identical shots, and that a full import writes the textures, manifest, and review page and honors overrides.
 
 ### What the fakes cannot tell us
 
@@ -43,6 +49,7 @@ The script starts a Lua 5.1 container (Docker, or Colima's containerd through `c
 - Layout, fonts, textures, and how things look at different UI scales.
 - Taint, protected-action errors, and keyboard or gamepad focus.
 - SavedVariables persistence.
+- Whether `Screenshot()`, `SetUIVisibility`, and the caption band behave in the real client, and whether real scenes crop well.
 
 ## In-game checklist
 
@@ -131,6 +138,22 @@ Start with one setting, Texture filtering, before testing presets.
 | 6.9 | Keyboard in window | Arrows to move and adjust, Enter to test | Works. Other keys still reach the game | Not run |
 | 6.10 | Controller | With gamepad mode on, use the D-pad, A, and B in the window and overlay | D-pad moves and adjusts, A tests or keeps, B closes or reverts | Not run |
 | 6.11 | Arbitrary starting values | Set odd values with Blizzard's panel first, then use GSM and Restore original | Your odd values come back | Not run |
+
+### Capture companion
+
+Enable `GraphicsSettingsManager_Capture` for these. See [GRAPHICS_ASSETS.md](GRAPHICS_ASSETS.md).
+
+| # | Check | Steps | Expected | Status |
+| --- | --- | --- | --- | --- |
+| 7.1 | List | `/gsmcap list` | Each setting with its status and three values | Not run |
+| 7.2 | Hide UI | `/gsmcap groundEffectDensity` | The interface hides, or chat asks for Alt+Z. The caption band shows at the bottom | Not run |
+| 7.3 | Shots | Let it finish | Four screenshot files, each with the band naming the shot. Chat says "Done: 4 screenshots." | Not run |
+| 7.4 | Restore | `/gsm diag` before and after | Every value matches the before list | Not run |
+| 7.5 | Esc | Start a run, press Esc | Stops, settings back, band gone | Not run |
+| 7.6 | Move | Start a run, press a movement key | Stops, settings back | Not run |
+| 7.7 | Quality parent | `/gsmcap graphicsGroundClutter` | Grass changes across Low, Medium, High. Settings back afterwards | Not run |
+| 7.8 | Log | `/reload`, then `scripts/import_captures.sh` | It finds the log and files and writes the review page | Not run |
+| 7.9 | Crops | Open `.capture/review.html` | The crop sits on the grass, not on water or the sky | Not run |
 
 ### Run log
 

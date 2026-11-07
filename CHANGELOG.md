@@ -18,6 +18,13 @@ First build. Complete and covered by automated tests, but not yet run in the For
 - Keyboard and gamepad controls for the window and the test overlay.
 - Lua 5.1 tests for the core and a UI smoke test, run with `scripts/test.sh`.
 
+### Added for developers
+
+- `GraphicsSettingsManager_Capture`, a companion addon not in the release ZIP. `/gsmcap` sets each setting to Low, Medium, and High plus a control shot, takes screenshots with a caption band, and puts everything back.
+- `scripts/import_captures.sh`, which finds where each setting changed the picture, crops that area at the panel's shape, and writes the textures, the manifest, and a review page.
+- `GraphicsSettingsManagerAPI`, a small public API the companion uses to read definitions and write one setting with readback.
+- The comparison panel shows the value used in each screenshot and an optional focus box.
+
 ### Not included
 
 - `SSAOType` and raid graphics CVars.
