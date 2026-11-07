@@ -76,3 +76,7 @@ Commands:
 - `scripts/test.sh` runs the Lua 5.1 tests in a container (Docker or Colima). See [docs/TESTING.md](docs/TESTING.md).
 - `scripts/build.sh` builds `dist/ForeverGraphicsTweaks-<version>.zip`.
 - Design decisions are in [docs/adr/](docs/adr/), terms in [GLOSSARY.md](GLOSSARY.md), API evidence in [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md), and changes in [CHANGELOG.md](CHANGELOG.md).
+
+## License
+
+MIT. See [LICENSE](LICENSE).

@@ -15,7 +15,12 @@ fi
 OUT="$ROOT/dist/$ADDON-$VERSION.zip"
 mkdir -p "$ROOT/dist"
 rm -f "$OUT"
-cd "$ROOT"
+# Stage a copy so the license ships inside the addon folder.
+STAGE=$(mktemp -d)
+trap 'rm -rf "$STAGE"' EXIT
+cp -R "$ROOT/$ADDON" "$STAGE/$ADDON"
+cp "$ROOT/LICENSE" "$STAGE/$ADDON/LICENSE.txt"
+cd "$STAGE"
 zip -qr -X "$OUT" "$ADDON" -x '*.DS_Store'
 echo "Built dist/$ADDON-$VERSION.zip"
 unzip -l "$OUT" | tail -1
