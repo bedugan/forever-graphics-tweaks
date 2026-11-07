@@ -1,8 +1,29 @@
 # Publish Graphics Settings Manager
 
-Prepared 2026-11-07. Publication is pending. Nothing has been uploaded to CurseForge.
+Submitted 2026-11-07. CurseForge project creation and the first Beta upload are complete. The author dashboard reports that the new project still requires moderator approval; the uploaded file was last observed as Processing. It is configured to publish automatically once approved. Public availability has not yet been established.
 
-## What the history establishes
+## Submission record
+
+| Item | Value |
+| --- | --- |
+| Project ID | `1790216` |
+| Author dashboard | <https://authors.curseforge.com/#/projects/1790216/files> |
+| Intended public URL | <https://www.curseforge.com/wow/addons/graphics-settings-manager>, pending approval |
+| File ID | `9499685` |
+| File display name | Graphics Settings Manager 0.1.0 beta |
+| Game version | Forever 1.60.1 |
+| Release type | Beta |
+| Source commit | `af1186ab73be975d907e9ea3fd4cf2e20913ef88`, merge of PR #12 |
+| Uploaded ZIP SHA-256 | `28716c167d0b2c1d2acf1b0c22ddcfa3b33c97787dc997aef22163d7ede6aed7` |
+| Uploaded ZIP size | 5,762,227 bytes |
+| Contents | 53 files, including 33 textures for 11 settings; five schematic comparisons |
+| License | MIT License, verified saved in the dashboard |
+| Distribution | Allow distribution to third parties, explicitly chosen by Brian and verified saved |
+| Source link | GitHub repository URL, verified saved; automatic packaging is off |
+
+The local upload receipt is `dist/curseforge/build-receipt.json`. Do not upload another copy of 0.1.0 to resolve a processing or moderation wait. Check the existing file and any moderator feedback first.
+
+## Review snapshot before the release merge
 
 - PR [#10](https://github.com/bedugan/graphics-settings-manager/pull/10) implemented the 0.1.0 pre-release and was merged. It received three rounds of adversarial review. Quality-level rewrites affecting apply and restore were fixed with regression tests.
 - The project was renamed from Forever Graphics Tweaks to Graphics Settings Manager so the name can remain useful if support expands. Current compatibility remains Forever only.
@@ -14,9 +35,9 @@ Prepared 2026-11-07. Publication is pending. Nothing has been uploaded to CurseF
 - Current automated verification: 90 Lua tests and 12 synthetic image-import tests pass. All Lua files parse, and the generated settings reference matches the definitions.
 - GitHub milestone issues #1 through #5 remain open despite the merged implementation. In-game smoke testing (#6), screenshot work (#7), and persistence (#8) also remain open. Issue state alone is not an implementation ledger.
 
-## Current recommendation
+## Release type
 
-Prepare 0.1.0 as a **Beta** following Brian's confirmation that the core safety and persistence checks passed. CurseForge supports Forever 1.60.1. An alpha-only first project is website-only according to its documentation. Do not label it Release to obtain app discovery. Beta-only first-project discovery is unclear because the official documents conflict.
+0.1.0 was submitted as a **Beta** following Brian's confirmation that the core safety and persistence checks passed. CurseForge supports Forever 1.60.1. An alpha-only first project is website-only according to its documentation. Do not label it Release to obtain app discovery. Beta-only first-project discovery is unclear because the official documents conflict.
 
 For a stable Release and normal app launch, finish the remaining checklist and confirm a clean install of the actual packaged ZIP. Keep the remaining checks separate from the safety and persistence results Brian has now reported. The full checklist remains [TESTING.md](TESTING.md).
 
@@ -28,10 +49,10 @@ The original prototype's 1.0 gate is unchanged. A capture session is not a compl
 | --- | --- |
 | Game and class | World of Warcraft, Addons |
 | Name | Graphics Settings Manager |
-| Suggested slug | `graphics-settings-manager`, subject to availability |
+| Project slug | `graphics-settings-manager` |
 | Summary | Try advanced Forever graphics settings with presets, profiles, and a 15-second Keep or Revert timer. |
 | Description | [CURSEFORGE_DESCRIPTION.md](CURSEFORGE_DESCRIPTION.md), starting with the title or first paragraph as the editor requires |
-| Category | Choose the dashboard's closest graphics or miscellaneous category. Actual options need inspection |
+| Category | Miscellaneous |
 | License | MIT License |
 | Source | `https://github.com/bedugan/graphics-settings-manager` |
 | Issues | `https://github.com/bedugan/graphics-settings-manager/issues` |
@@ -66,12 +87,12 @@ Initial beta for World of Warcraft: Forever 1.60.1. Includes 16 graphics control
 
 ## Submit and verify
 
-1. Sign into the [author dashboard](https://authors.curseforge.com/). Brian confirmed there is no existing project; create a new one owned by his account.
+1. Open the [existing project](https://authors.curseforge.com/#/projects/1790216/files). Do not create a second project.
 2. Review the prepared page, choose an avatar, and fill the project fields. Confirm Forever and 1.60.1 are offered on the upload form. Do not choose another client to get past a missing option.
 3. Upload the candidate ZIP with its changelog and the agreed release type. A new project needs a file before moderation proceeds.
 4. Check both project approval and file approval. Upload completion alone does not mean publication.
 5. Once approved, verify the public project URL, Forever/version labels, downloadable file, and clean install. Check app discovery separately for a release type intended for the app.
-6. Record the project URL and numeric project ID here. Add `X-Curse-Project-ID` and upload automation later if useful. No token is needed for the first manual submission.
+6. After approval, verify the public page, download, and app visibility, then update this record. Configure the GitHub issue tracker if the pending-project Issues control becomes available. Add `X-Curse-Project-ID` and upload automation later if useful.
 
 ## Sources
 
