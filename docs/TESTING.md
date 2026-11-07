@@ -37,7 +37,7 @@ The script starts a Lua 5.1 container (Docker, or Colima's containerd through `c
 | --- | --- | --- |
 | 2026-11-06 | `feat/m1-m5-prototype` | 70 passed, 0 failed |
 | 2026-11-06 | `feat/capture-companion` | 85 passed, 0 failed. Import: 11 passed |
-| 2026-11-07 | `fix/capture-feedback` | 89 passed, 0 failed. Import: 12 passed |
+| 2026-11-07 | `fix/capture-feedback` | 90 passed, 0 failed. Import: 12 passed |
 
 ### Import tests
 
@@ -148,16 +148,17 @@ Enable `GraphicsSettingsManager_Capture` for these. See [GRAPHICS_ASSETS.md](GRA
 
 | # | Check | Steps | Expected | Status |
 | --- | --- | --- | --- | --- |
-| 7.1 | List | `/gsmcap list` | Each setting with its status and three values | Not run |
+| 7.1 | List | `/gsmcap list` | Each setting with its status and three values | Pass. All 16 settings available with three values |
 | 7.2 | Hide UI | `/gsmcap groundEffectDensity` | The interface hides, or chat asks for Alt+Z. The caption band shows at the bottom | Pass. Hid by itself every run |
 | 7.3 | Shots | Let it finish | Four screenshot files, each with the band naming the shot. Chat says "Done: 4 screenshots." | Pass. 96 PNG files over 15 runs, each with the band |
 | 7.4 | Restore | `/gsm diag` before and after | Every value matches the before list | Pass |
 | 7.5 | Esc | Start a run, press Esc | Stops, settings back, band gone | Pass. Stopped the run; restore not checked with `/gsm diag` |
 | 7.6 | Move | Start a run, press a movement key | Stops, settings back | Pass. Logged as "you moved" after one shot |
-| 7.7 | Quality parent | `/gsmcap graphicsGroundClutter` | Grass changes across Low, Medium, High. Settings back afterwards | Not run |
+| 7.7 | Quality parent | `/gsmcap graphicsGroundClutter` | Grass changes across Low, Medium, High. Settings back afterwards | Pass. Grass and plants fill in across the three levels, and `/gsm diag` matched afterwards |
 | 7.8 | Log | `/reload`, then `scripts/import_captures.sh` | It finds the log and files and writes the review page | Pass after a fix. The first import missed one file saved 3 seconds before its log entry |
-| 7.9 | Crops | Open `.capture/review.html` | The crop sits on the grass, not on water or the sky | Mixed. Grass, shadows, and object fade crops land on the change. The long-view scene was blocked by trees, so those crops sit on leaves and sky |
-| 7.10 | Limits | Set grass fade start to 280, then `/gsmcap groundEffectDist` | Chat says the setting was dropped and why. No run starts | Not confirmed. In session 2 grass fade start was already 40, so the run went ahead |
+| 7.9 | Crops | Open `.capture/review.html` | The crop sits on the grass, not on water or the sky | Mixed. Session 3 at 100% render scale: 8 of 11 crops land on the change by themselves. Reflections and object fade needed a manual crop, and object culling uses the session 1 set. Grass fade start, texture filtering, and both sharpening settings show no visible change at panel size and keep their schematics |
+| 7.10 | Limits | Set grass fade start to 280, then `/gsmcap groundEffectDist` | Chat says the setting was dropped and why. No run starts | Pass. On Balanced, chat said grass fade start (280) blocked it and "Nothing left to capture." No run started |
+| 7.11 | Render scale | Set render scale below 100%, then `/gsmcap groundEffectDensity` | Chat says the render scale and asks for 100%. No run starts | Pass. At 50%, chat said "Render scale is 50%. Set it to 100% in Options > Graphics first." No run started |
 
 ### Run log
 
@@ -165,4 +166,5 @@ Enable `GraphicsSettingsManager_Capture` for these. See [GRAPHICS_ASSETS.md](GRA
 | --- | --- | --- | --- | --- |
 | 2026-11-07 | 1.60.1.70790 | Brian, macOS | 7.2, 7.3, 7.5, 7.8, 7.9 | No Lua errors in BugSack. The 6 second wait for background settings felt too long (now 3). `/gsmcap groundEffectDist` with grass fade start at 280 silently skipped Low, Medium, and the control, which led to 7.10. Several settings showed little visible change |
 | 2026-11-07 | 1.60.1.70790 | Brian, macOS | 7.4, 7.6, recapture | Zephras Isle. Mismatched install (old GSM, new companion) made `/gsmcap` fail silently, fixed with a clear refusal. The long view now shows distant buildings appear. Grass fade start shows no clear change in its scene, and a walking bird pulled its automatic crop. Water reflections and grass fade start use manual crops |
+| 2026-11-07 | 1.60.1.70790 | Brian, macOS | 7.1, 7.4, 7.7, 7.10, 7.11, full recapture | Zephras Isle at 100% render scale. Sessions 1 and 2 had run at the Mac's default 50%, which blurred fine detail. `/gsm diag` matched before and after. Water reflections look weak on the Mac and may be redone on SteamOS. |
 | 2026-11-07 | Not supplied | Brian, owner report | 3.3, 3.4, 3.5, 4.8, profile portion of 6.4 | Confirmed all five checks passed in the publication conversation. Exact OS and package revision not supplied. Remaining rows retain their prior status |

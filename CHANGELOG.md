@@ -2,11 +2,17 @@
 
 ## Unreleased
 
+### Added
+
+- In-game screenshots for 11 settings, captured on Forever 1.60.1 (70790). Ten were taken at 100% render scale. Small object culling comes from an earlier session at 50%, which showed the change more clearly. Grass fade start, texture filtering, Sharpness, Always sharpen, and weather density keep their schematics.
+
 ### Changed
 
+- Balanced is now the best-value preset. It changes only grass density (64), grass draw distance (270) and fade start (230), object fade distance (150), and shadow cascades (3). Quality levels, small object culling, terrain detail distance, Always sharpen, and texture filtering stay as they are, because the screenshots showed little or no gain over the game's defaults. See ADR 0008.
 - `/gsmcap` waits 3 seconds after a background setting, down from 6.
 - `/gsmcap` checks every level before it starts. A setting that would break a GSM limit is dropped with a reason in chat, instead of skipping shots silently.
 - The capture import takes each setting from the newest run with a complete set, so one import covers a whole session, and it matches files saved up to 5 seconds before their log entry.
+- `/gsmcap` refuses to start when render scale is below 100%, because the shots would be blurred.
 - `GraphicsSettingsManagerAPI.check` says why `set` would refuse a value, without writing it.
 
 ## 0.1.0 (pre-release), 2026-11-06

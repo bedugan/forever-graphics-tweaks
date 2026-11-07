@@ -1,0 +1,408 @@
+{
+  "settings": {
+    "graphicsEnvironmentDetail": {
+      "build": "1.60.1.70790",
+      "captured": "110726_111820",
+      "coords": [
+        0,
+        1,
+        0,
+        0.71875
+      ],
+      "crop": [
+        1676,
+        505,
+        1348,
+        484
+      ],
+      "files": {
+        "high": "WoWScrnShot_110726_111851.png",
+        "low": "WoWScrnShot_110726_111843.png",
+        "medium": "WoWScrnShot_110726_111847.png"
+      },
+      "focus": null,
+      "note": "Zephras Isle, Shen'dar Village. Fixed camera, only this setting changed.",
+      "share": 0.738,
+      "source": [
+        3024,
+        1798
+      ],
+      "values": {
+        "high": 9,
+        "low": 0,
+        "medium": 5
+      },
+      "zone": "Zephras Isle, Shen'dar Village"
+    },
+    "graphicsGroundClutter": {
+      "build": "1.60.1.70790",
+      "captured": "110726_111343",
+      "coords": [
+        0,
+        1,
+        0,
+        0.71875
+      ],
+      "crop": [
+        69,
+        378,
+        2123,
+        762
+      ],
+      "files": {
+        "high": "WoWScrnShot_110726_111424.png",
+        "low": "WoWScrnShot_110726_111412.png",
+        "medium": "WoWScrnShot_110726_111418.png"
+      },
+      "focus": null,
+      "note": "Zephras Isle, Shen'dar Village. Fixed camera, only this setting changed.",
+      "share": 0.714,
+      "source": [
+        3024,
+        1798
+      ],
+      "values": {
+        "high": 9,
+        "low": 0,
+        "medium": 5
+      },
+      "zone": "Zephras Isle, Shen'dar Village"
+    },
+    "graphicsViewDistance": {
+      "build": "1.60.1.70790",
+      "captured": "110726_111820",
+      "coords": [
+        0,
+        1,
+        0,
+        0.71875
+      ],
+      "crop": [
+        1562,
+        619,
+        1411,
+        507
+      ],
+      "files": {
+        "high": "WoWScrnShot_110726_111834.png",
+        "low": "WoWScrnShot_110726_111826.png",
+        "medium": "WoWScrnShot_110726_111830.png"
+      },
+      "focus": [
+        0.067,
+        0.2875,
+        0.8214,
+        0.5375
+      ],
+      "note": "Zephras Isle, Shen'dar Village. Fixed camera, only this setting changed.",
+      "share": 0.715,
+      "source": [
+        3024,
+        1798
+      ],
+      "values": {
+        "high": 9,
+        "low": 0,
+        "medium": 5
+      },
+      "zone": "Zephras Isle, Shen'dar Village"
+    },
+    "groundEffectDensity": {
+      "build": "1.60.1.70790",
+      "captured": "110726_111343",
+      "coords": [
+        0,
+        1,
+        0,
+        0.71875
+      ],
+      "crop": [
+        113,
+        680,
+        1090,
+        391
+      ],
+      "files": {
+        "high": "WoWScrnShot_110726_111401.png",
+        "low": "WoWScrnShot_110726_111349.png",
+        "medium": "WoWScrnShot_110726_111355.png"
+      },
+      "focus": [
+        0.3584,
+        0.0645,
+        0.5087,
+        0.8871
+      ],
+      "note": "Zephras Isle, Shen'dar Village. Fixed camera, only this setting changed.",
+      "share": 0.711,
+      "source": [
+        3024,
+        1798
+      ],
+      "values": {
+        "high": 256,
+        "low": 16,
+        "medium": 136
+      },
+      "zone": "Zephras Isle, Shen'dar Village"
+    },
+    "groundEffectDist": {
+      "build": "1.60.1.70790",
+      "captured": "110726_111548",
+      "coords": [
+        0,
+        1,
+        0,
+        0.71875
+      ],
+      "crop": [
+        1726,
+        214,
+        1090,
+        391
+      ],
+      "files": {
+        "high": "WoWScrnShot_110726_111605.png",
+        "low": "WoWScrnShot_110726_111555.png",
+        "medium": "WoWScrnShot_110726_111600.png"
+      },
+      "focus": null,
+      "note": "Zephras Isle, Shen'dar Village. Fixed camera, only this setting changed.",
+      "share": 0.75,
+      "source": [
+        3024,
+        1798
+      ],
+      "values": {
+        "high": 500,
+        "low": 40,
+        "medium": 270
+      },
+      "zone": "Zephras Isle, Shen'dar Village"
+    },
+    "horizonStart": {
+      "build": "1.60.1.70790",
+      "captured": "110726_111820",
+      "coords": [
+        0,
+        1,
+        0,
+        0.71875
+      ],
+      "crop": [
+        996,
+        468,
+        1606,
+        577
+      ],
+      "files": {
+        "high": "WoWScrnShot_110726_111933.png",
+        "low": "WoWScrnShot_110726_111922.png",
+        "medium": "WoWScrnShot_110726_111927.png"
+      },
+      "focus": [
+        0.1765,
+        0.4239,
+        0.3882,
+        0.5435
+      ],
+      "note": "Zephras Isle, Shen'dar Village. Fixed camera, only this setting changed.",
+      "share": 0.714,
+      "source": [
+        3024,
+        1798
+      ],
+      "values": {
+        "high": 6000,
+        "low": 400,
+        "medium": 3200
+      },
+      "zone": "Zephras Isle, Shen'dar Village"
+    },
+    "lodObjectCullSize": {
+      "build": "1.60.1.70790",
+      "captured": "110726_095231",
+      "coords": [
+        0,
+        1,
+        0,
+        0.71875
+      ],
+      "crop": [
+        1070,
+        295,
+        512,
+        184
+      ],
+      "files": {
+        "high": "WoWScrnShot_110726_095332.png",
+        "low": "WoWScrnShot_110726_095324.png",
+        "medium": "WoWScrnShot_110726_095328.png"
+      },
+      "focus": [
+        0.8025,
+        0.5172,
+        0.1975,
+        0.4138
+      ],
+      "note": "Elwynn Forest, Forest's Edge. Fixed camera, only this setting changed.",
+      "share": 0.942,
+      "source": [
+        3024,
+        1798
+      ],
+      "values": {
+        "high": 4,
+        "low": 30,
+        "medium": 17
+      },
+      "zone": "Elwynn Forest, Forest's Edge"
+    },
+    "lodObjectFadeScale": {
+      "build": "1.60.1.70790",
+      "captured": "110726_112024",
+      "coords": [
+        0,
+        1,
+        0,
+        0.71875
+      ],
+      "crop": [
+        1724,
+        24,
+        1270,
+        456
+      ],
+      "files": {
+        "high": "WoWScrnShot_110726_112038.png",
+        "low": "WoWScrnShot_110726_112029.png",
+        "medium": "WoWScrnShot_110726_112033.png"
+      },
+      "focus": null,
+      "note": "Zephras Isle, Shen'dar Village. Fixed camera, only this setting changed.",
+      "share": 0.007,
+      "source": [
+        3024,
+        1798
+      ],
+      "values": {
+        "high": 300,
+        "low": 50,
+        "medium": 180
+      },
+      "zone": "Zephras Isle, Shen'dar Village"
+    },
+    "reflectionMode": {
+      "build": "1.60.1.70790",
+      "captured": "110726_112459",
+      "coords": [
+        0,
+        1,
+        0,
+        0.71875
+      ],
+      "crop": [
+        1497,
+        511,
+        1361,
+        489
+      ],
+      "files": {
+        "high": "WoWScrnShot_110726_112512.png",
+        "low": "WoWScrnShot_110726_112504.png",
+        "medium": "WoWScrnShot_110726_112508.png"
+      },
+      "focus": null,
+      "note": "Zephras Isle, Windsong Lake. Fixed camera, only this setting changed.",
+      "share": 0.328,
+      "source": [
+        3024,
+        1798
+      ],
+      "values": {
+        "high": 3,
+        "low": 0,
+        "medium": 2
+      },
+      "zone": "Zephras Isle, Windsong Lake"
+    },
+    "shadowNumCascades": {
+      "build": "1.60.1.70790",
+      "captured": "110726_112703",
+      "coords": [
+        0,
+        1,
+        0,
+        0.71875
+      ],
+      "crop": [
+        1739,
+        239,
+        1285,
+        461
+      ],
+      "files": {
+        "high": "WoWScrnShot_110726_112716.png",
+        "low": "WoWScrnShot_110726_112708.png",
+        "medium": "WoWScrnShot_110726_112712.png"
+      },
+      "focus": [
+        0.1716,
+        0.0959,
+        0.6765,
+        0.8082
+      ],
+      "note": "Zephras Isle, Shen'dar Village. Fixed camera, only this setting changed.",
+      "share": 0.717,
+      "source": [
+        3024,
+        1798
+      ],
+      "values": {
+        "high": 4,
+        "low": 1,
+        "medium": 3
+      },
+      "zone": "Zephras Isle, Shen'dar Village"
+    },
+    "terrainLodDist": {
+      "build": "1.60.1.70790",
+      "captured": "110726_111820",
+      "coords": [
+        0,
+        1,
+        0,
+        0.71875
+      ],
+      "crop": [
+        2451,
+        1589,
+        573,
+        206
+      ],
+      "files": {
+        "high": "WoWScrnShot_110726_111912.png",
+        "low": "WoWScrnShot_110726_111901.png",
+        "medium": "WoWScrnShot_110726_111906.png"
+      },
+      "focus": [
+        0.6264,
+        0.0909,
+        0.3736,
+        0.8485
+      ],
+      "note": "Zephras Isle, Shen'dar Village. Fixed camera, only this setting changed.",
+      "share": 0.716,
+      "source": [
+        3024,
+        1798
+      ],
+      "values": {
+        "high": 1500,
+        "low": 200,
+        "medium": 850
+      },
+      "zone": "Zephras Isle, Shen'dar Village"
+    }
+  }
+}

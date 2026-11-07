@@ -1,0 +1,38 @@
+{
+  "ResampleAlwaysSharpen": {
+    "skip": true,
+    "reason": "sharpening shows no visible change at the panel size, so this setting keeps its text explanation only"
+  },
+  "ResampleSharpness": {
+    "skip": true,
+    "reason": "sharpening shows no visible change at the panel size, so this setting keeps its text explanation only"
+  },
+  "groundEffectFade": {
+    "skip": true,
+    "reason": "two sessions showed no visible change, so this setting keeps its schematic"
+  },
+  "reflectionMode": {
+    "crop": [
+      0.72,
+      0.42,
+      0.45
+    ],
+    "focus": null
+  },
+  "textureFilteringMode": {
+    "skip": true,
+    "reason": "filtering differences are too fine to see at the panel size, so this setting keeps its schematic"
+  },
+  "lodObjectFadeScale": {
+    "crop": [
+      0.78,
+      0.14,
+      0.42
+    ],
+    "focus": null
+  },
+  "lodObjectCullSize": {
+    "skip": true,
+    "reason": "kept from run 12 (session 1), which shows the change more clearly. Re-import it with --run 12 --only lodObjectCullSize"
+  }
+}
