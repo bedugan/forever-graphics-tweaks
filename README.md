@@ -28,7 +28,7 @@ Target: Forever (Camelot) 1.60.1, interface 16001.
 
 ## Install
 
-1. Download `GraphicsSettingsManager-0.1.0.zip` from the [releases page](https://github.com/bedugan/forever-graphics-tweaks/releases).
+1. Download `GraphicsSettingsManager-0.1.0.zip` from the [releases page](https://github.com/bedugan/graphics-settings-manager/releases).
 2. Quit the game, or be at the login screen.
 3. Unzip it into the Forever client's `Interface/AddOns` folder. You should end up with `Interface/AddOns/GraphicsSettingsManager/GraphicsSettingsManager.toc`. If you see `GraphicsSettingsManager/GraphicsSettingsManager/`, move the inner folder up one level.
 4. Start the game. At character select, open AddOns and check that Graphics Settings Manager is enabled.
@@ -68,7 +68,7 @@ Commands:
 
 - If a test is running when you log out or reload, GSM puts the old values back first.
 - If the game crashes during a test, the client may keep the test values. Open GSM and use Restore original, or set the values back in the game's own Graphics options.
-- Report problems with the output of `/gsm diag` and any BugSack error at [GitHub issues](https://github.com/bedugan/forever-graphics-tweaks/issues).
+- Report problems with the output of `/gsm diag` and any BugSack error at [GitHub issues](https://github.com/bedugan/graphics-settings-manager/issues).
 
 ## Development
 

@@ -30,7 +30,7 @@ Sources: Blizzard's UI source on the `forever` branch at build 1.60.1.70790 (Get
 
 | Question | Decision |
 | --- | --- |
-| Remote repo | Public GitHub repo `bedugan/forever-graphics-tweaks` |
+| Remote repo | Public GitHub repo `bedugan/graphics-settings-manager`, renamed from `forever-graphics-tweaks` |
 | UI shell | Own window, Settings canvas as a launcher (ADR 0001) |
 | In-game gate | Build M1 to M5 as 0.1.0 pre-release, all settings unverified |
 | Lua tests | Lua 5.1 container through Colima (ADR 0006) |
