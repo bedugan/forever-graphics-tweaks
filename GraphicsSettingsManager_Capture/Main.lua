@@ -132,6 +132,10 @@ function ns.start(names)
 	if session then
 		return false, "A capture is already running. /gsmcap stop ends it."
 	end
+	-- Both addons say 0.1.0, so an older GSM folder can sit next to a newer companion.
+	if not gsm.check then
+		return false, "This companion needs a newer GraphicsSettingsManager. Replace that folder too, then /reload."
+	end
 	local reason = gsm.blocked()
 	if reason then
 		return false, reason

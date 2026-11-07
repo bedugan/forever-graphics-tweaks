@@ -37,7 +37,7 @@ The script starts a Lua 5.1 container (Docker, or Colima's containerd through `c
 | --- | --- | --- |
 | 2026-11-06 | `feat/m1-m5-prototype` | 70 passed, 0 failed |
 | 2026-11-06 | `feat/capture-companion` | 85 passed, 0 failed. Import: 11 passed |
-| 2026-11-07 | `fix/capture-feedback` | 88 passed, 0 failed. Import: 12 passed |
+| 2026-11-07 | `fix/capture-feedback` | 89 passed, 0 failed. Import: 12 passed |
 
 ### Import tests
 

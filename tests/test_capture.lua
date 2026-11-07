@@ -320,6 +320,14 @@ test("gsmcap: a setting with a level over a live limit is dropped before the run
 	eq(run.labels.groundEffectFade, nil)
 end)
 
+test("gsmcap: an older GSM without check is refused with a clear message", function()
+	local gsm, env = newCapture()
+	gsm.API.check = nil
+	env.cap("groundEffectDensity")
+	eq(GraphicsSettingsManagerCaptureDB, nil, "no run is logged")
+	truthy(env.chat[#env.chat]:find("newer GraphicsSettingsManager"))
+end)
+
 test("gsmcap: Esc, movement, and combat stop the run and restore", function()
 	for _, stop in ipairs({ "esc", "move", "combat" }) do
 		local gsm, env = newCapture()
