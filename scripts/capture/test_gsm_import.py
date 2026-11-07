@@ -85,14 +85,16 @@ Other = nil
 
 
 class Matching(unittest.TestCase):
-    def test_nearest_unused_file_within_two_seconds(self):
+    def test_nearest_unused_file_saved_just_before_the_log_stamp(self):
         with tempfile.TemporaryDirectory() as d:
             for name in ["WoWScrnShot_110626_201500.jpg", "WoWScrnShot_110626_201502.jpg",
-                         "WoWScrnShot_110626_201530.jpg", "notes.txt"]:
+                         "WoWScrnShot_110626_201530.jpg", "WoWScrnShot_110626_201545.jpg", "notes.txt"]:
                 Path(d, name).write_bytes(b"")
-            shots = [{"stamp": "110626_201501"}, {"stamp": "110626_201502"}, {"stamp": "110626_201510"}]
+            shots = [{"stamp": "110626_201501"}, {"stamp": "110626_201502"}, {"stamp": "110626_201510"},
+                     {"stamp": "110626_201533"}, {"stamp": "110626_201543"}]
             got = [p.name if p else None for p in gi.match_files(shots, d)]
-            self.assertEqual(got, ["WoWScrnShot_110626_201500.jpg", "WoWScrnShot_110626_201502.jpg", None])
+            self.assertEqual(got, ["WoWScrnShot_110626_201500.jpg", "WoWScrnShot_110626_201502.jpg", None,
+                                   "WoWScrnShot_110626_201530.jpg", None])
 
 
 class FindChange(unittest.TestCase):
@@ -155,6 +157,26 @@ class FindChange(unittest.TestCase):
         levels, control, _ = grass_set()
         result = self.analyze(levels, control)
         self.assertLessEqual(result["worlds"][0].size[1], H - 64)
+
+
+class PickSets(unittest.TestCase):
+    @staticmethod
+    def run_of(*sets):
+        """sets: (cvar, levels) pairs, logged in that order."""
+        return {"shots": [{"cvar": cvar, "shot": lvl, "level": lvl, "stamp": "110626_200000"}
+                          for cvar, levels in sets for lvl in levels]}
+
+    def test_newest_complete_set_wins_and_partial_runs_do_not_replace_it(self):
+        full = ("low", "medium", "high", "control")
+        runs = [
+            (1, self.run_of(("groundEffectDist", ("high",)))),
+            (2, self.run_of(("groundEffectDist", full), ("groundEffectFade", ("low", "control")))),
+            (3, self.run_of(("groundEffectDist", ("high",)), ("reflectionMode", full))),
+            (4, self.run_of(("reflectionMode", full))),
+        ]
+        sets, partial = gi.pick_sets(runs)
+        self.assertEqual({cvar: v[0] for cvar, v in sets.items()}, {"groundEffectDist": 2, "reflectionMode": 4})
+        self.assertEqual({cvar: v[0] for cvar, v in partial.items()}, {"groundEffectFade": 2})
 
 
 class EndToEnd(unittest.TestCase):

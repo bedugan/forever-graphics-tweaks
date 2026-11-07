@@ -37,6 +37,7 @@ The script starts a Lua 5.1 container (Docker, or Colima's containerd through `c
 | --- | --- | --- |
 | 2026-11-06 | `feat/m1-m5-prototype` | 70 passed, 0 failed |
 | 2026-11-06 | `feat/capture-companion` | 85 passed, 0 failed. Import: 11 passed |
+| 2026-11-07 | `fix/capture-feedback` | 88 passed, 0 failed. Import: 12 passed |
 
 ### Import tests
 
@@ -146,17 +147,18 @@ Enable `GraphicsSettingsManager_Capture` for these. See [GRAPHICS_ASSETS.md](GRA
 | # | Check | Steps | Expected | Status |
 | --- | --- | --- | --- | --- |
 | 7.1 | List | `/gsmcap list` | Each setting with its status and three values | Not run |
-| 7.2 | Hide UI | `/gsmcap groundEffectDensity` | The interface hides, or chat asks for Alt+Z. The caption band shows at the bottom | Not run |
-| 7.3 | Shots | Let it finish | Four screenshot files, each with the band naming the shot. Chat says "Done: 4 screenshots." | Not run |
+| 7.2 | Hide UI | `/gsmcap groundEffectDensity` | The interface hides, or chat asks for Alt+Z. The caption band shows at the bottom | Pass. Hid by itself every run |
+| 7.3 | Shots | Let it finish | Four screenshot files, each with the band naming the shot. Chat says "Done: 4 screenshots." | Pass. 96 PNG files over 15 runs, each with the band |
 | 7.4 | Restore | `/gsm diag` before and after | Every value matches the before list | Not run |
-| 7.5 | Esc | Start a run, press Esc | Stops, settings back, band gone | Not run |
+| 7.5 | Esc | Start a run, press Esc | Stops, settings back, band gone | Pass. Stopped the run; restore not checked with `/gsm diag` |
 | 7.6 | Move | Start a run, press a movement key | Stops, settings back | Not run |
 | 7.7 | Quality parent | `/gsmcap graphicsGroundClutter` | Grass changes across Low, Medium, High. Settings back afterwards | Not run |
-| 7.8 | Log | `/reload`, then `scripts/import_captures.sh` | It finds the log and files and writes the review page | Not run |
-| 7.9 | Crops | Open `.capture/review.html` | The crop sits on the grass, not on water or the sky | Not run |
+| 7.8 | Log | `/reload`, then `scripts/import_captures.sh` | It finds the log and files and writes the review page | Pass after a fix. The first import missed one file saved 3 seconds before its log entry |
+| 7.9 | Crops | Open `.capture/review.html` | The crop sits on the grass, not on water or the sky | Mixed. Grass, shadows, and object fade crops land on the change. The long-view scene was blocked by trees, so those crops sit on leaves and sky |
+| 7.10 | Limits | Set grass fade start to 280, then `/gsmcap groundEffectDist` | Chat says the setting was dropped and why. No run starts | Not run |
 
 ### Run log
 
 | Date | Build | Tester | Checks run | Notes |
 | --- | --- | --- | --- | --- |
-| | | | | |
+| 2026-11-07 | 1.60.1.70790 | Brian, macOS | 7.2, 7.3, 7.5, 7.8, 7.9 | No Lua errors in BugSack. The 6 second wait for background settings felt too long (now 3). `/gsmcap groundEffectDist` with grass fade start at 280 silently skipped Low, Medium, and the control, which led to 7.10. Several settings showed little visible change |

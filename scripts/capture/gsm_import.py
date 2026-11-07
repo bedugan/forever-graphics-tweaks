@@ -6,6 +6,9 @@ this in a container. See docs/GRAPHICS_ASSETS.md.
 
   gsm_import.py dates    --log FILE [--run N]
   gsm_import.py import   --log FILE --screens DIR --repo DIR [--run N] [--only a,b]
+
+Without --run, each setting comes from the newest run that logged its Low,
+Medium, and High shots, so one import covers a session of several scenes.
   gsm_import.py manifest --repo DIR
 
 For each setting it finds the area that changes between Low, Medium, and
@@ -36,7 +39,9 @@ COORDS = [0, 1, 0, OUT_H / TEXTURE[1]]
 LEVELS = ("low", "medium", "high")
 # Share of the change the crop must hold.
 SHARE = 0.7
-MATCH_SECONDS = 2
+# The file name is the time of the request. The log stamp is the time the game
+# finished saving, which for a large PNG is up to a few seconds later.
+MATCH_BEFORE, MATCH_AFTER = 5, 1
 ANALYSIS_WIDTH = 480
 # Per-pixel difference, out of 255, treated as compression noise.
 FLOOR = 3.0
@@ -197,8 +202,9 @@ def stamp_time(stamp):
 
 
 def match_files(shots, folder):
-    """Pairs each logged shot with the nearest unused screenshot within
-    MATCH_SECONDS. Returns a list of paths, or None where nothing matched."""
+    """Pairs each logged shot with the nearest unused screenshot from
+    MATCH_BEFORE seconds before its stamp to MATCH_AFTER after. Returns a list
+    of paths, or None where nothing matched."""
     files = []
     for path in sorted(Path(folder).iterdir()):
         m = SHOT_FILE.match(path.name)
@@ -209,8 +215,9 @@ def match_files(shots, folder):
         when = stamp_time(shot["stamp"])
         best = None
         for i, (t, path) in enumerate(files):
-            gap = abs((t - when).total_seconds())
-            if i not in used and gap <= MATCH_SECONDS and (best is None or gap < best[0]):
+            ahead = (t - when).total_seconds()
+            gap = abs(ahead)
+            if i not in used and -MATCH_BEFORE <= ahead <= MATCH_AFTER and (best is None or gap < best[0]):
                 best = (gap, i)
         if best is None:
             out.append(None)
@@ -487,7 +494,7 @@ def panel_view(img, crop, focus):
     return view
 
 
-def review_html(run_number, run, sections, problems):
+def review_html(sections, problems):
     css = """
     body{margin:0;background:#141a33;color:#e8ecff;font:14px/1.5 -apple-system,Segoe UI,sans-serif}
     main{max-width:1500px;margin:auto;padding:24px}
@@ -501,9 +508,8 @@ def review_html(run_number, run, sections, problems):
     ul{margin:6px 0}
     """
     parts = [f"<!doctype html><meta charset=utf-8><title>GSM capture review</title><style>{css}</style><main>",
-             f"<h1>Capture review, run {run_number}</h1>",
-             f"<p class=muted>Build {run.get('build')}, {run.get('zone')}, started {run.get('started')}. "
-             "Red boxes on the full frames are the crop. The orange map is the change GSM found. "
+             "<h1>Capture review</h1>",
+             "<p class=muted>Red boxes on the full frames are the crop. The orange map is the change GSM found. "
              "Check each crop, then commit or fix it in "
              f"<code>{OVERRIDES_JSON}</code>.</p>"]
     if problems:
@@ -513,7 +519,8 @@ def review_html(run_number, run, sections, problems):
     for s in sections:
         flag = ("<span class=bad>No visible change found. Check the camera and the settle time.</span>"
                 if s["no_change"] else f"<span class=ok>Crop holds {s['share'] * 100:.0f}% of the change.</span>")
-        parts.append(f"<section><h2>{s['label']} <span class=muted>{s['cvar']}</span></h2><p>{flag} "
+        parts.append(f"<section><h2>{s['label']} <span class=muted>{s['cvar']}</span></h2>"
+                     f"<p class=muted>Run {s['run']}, {s['zone']}, started {s['started']}, build {s['build']}.</p><p>{flag} "
                      f"Values: {s['values_text']}. Crop {s['crop']} of a {s['size'][0]}x{s['size'][1]} world area."
                      f"{' Override applied.' if s['override'] else ''}</p><div class=row>")
         for name, img in s["frames"]:
@@ -530,9 +537,17 @@ def review_html(run_number, run, sections, problems):
 
 # ----- Commands ---------------------------------------------------------
 
+def chosen_runs(runs, number):
+    """[(number, run)]: just run `number`, or every run when it is None."""
+    if number is not None:
+        return [pick_run(runs, number)]
+    pick_run(runs, None)  # fails clearly on an empty log
+    return list(enumerate(runs, 1))
+
+
 def cmd_dates(args):
-    _, run = pick_run(load_log(args.log), args.run)
-    for date in sorted({s["stamp"][:6] for s in listify(run.get("shots"))}):
+    runs = chosen_runs(load_log(args.log), args.run)
+    for date in sorted({s["stamp"][:6] for _, run in runs for s in listify(run.get("shots"))}):
         print(date)
 
 
@@ -550,33 +565,55 @@ def group_shots(run):
     return by_cvar
 
 
+def pick_sets(runs):
+    """cvar -> (number, run, group) from the newest run with Low, Medium, and
+    High logged, plus cvar -> (number, run) for settings with no such run."""
+    sets, partial = {}, {}
+    for number, run in runs:
+        for cvar, group in group_shots(run).items():
+            if all(level in group for level in LEVELS):
+                sets[cvar] = (number, run, group)
+            else:
+                partial[cvar] = (number, run)
+    return sets, {cvar: v for cvar, v in partial.items() if cvar not in sets}
+
+
 def cmd_import(args):
     repo = Path(args.repo)
-    number, run = pick_run(load_log(args.log), args.run)
-    shots = listify(run.get("shots"))
-    paths = match_files(shots, args.screens)
-    for shot, path in zip(shots, paths):
-        shot["path"] = path
-    band = run.get("band") or DEFAULT_BAND
-    problems = []
-    if not run.get("band"):
-        problems.append(f"The run did not record the caption band height. Assumed {DEFAULT_BAND}.")
-    for skipped in listify(run.get("skipped")):
-        problems.append(f"{skipped['cvar']} {skipped['shot']} was skipped in game: {skipped['message']}.")
-    if run.get("result") != "done":
-        problems.append(f"The run ended early: {run.get('result')}.")
-
     only = set(filter(None, (args.only or "").split(",")))
+    sets, partial = pick_sets(chosen_runs(load_log(args.log), args.run))
+    problems = []
+    for cvar, (number, run) in sorted(partial.items()):
+        if only and cvar not in only:
+            continue
+        why = [s["message"].rstrip(".") for s in listify(run.get("skipped")) if s.get("cvar") == cvar]
+        problems.append(f"{cvar}: no run has its Low, Medium, and High shots. Newest try, run {number}: "
+                        + ("; ".join(why) if why else f"ended with {run.get('result')}") + ". Not imported.")
+
+    matched = set()
+    for cvar, (number, run, _) in sets.items():
+        if number in matched or (only and cvar not in only):
+            continue
+        matched.add(number)
+        shots = listify(run.get("shots"))
+        for shot, path in zip(shots, match_files(shots, args.screens)):
+            shot["path"] = path
+        if not run.get("band"):
+            problems.append(f"Run {number} did not record the caption band height. Assumed {DEFAULT_BAND}.")
+        if run.get("result") != "done":
+            problems.append(f"Run {number} ended early ({run.get('result')}). Its complete sets are used.")
+
     overrides = read_json(repo / OVERRIDES_JSON, {})
     manifest = read_json(repo / MANIFEST_JSON, {"settings": {}})
     shots_dir = repo / SHOTS_DIR
     shots_dir.mkdir(parents=True, exist_ok=True)
     sections, imported = [], []
-    labels = run.get("labels") or {}
 
-    for cvar, group in group_shots(run).items():
+    for cvar, (number, run, group) in sorted(sets.items()):
         if only and cvar not in only:
             continue
+        band = run.get("band") or DEFAULT_BAND
+        labels = run.get("labels") or {}
         override = overrides.get(cvar, {})
         if override.get("skip"):
             problems.append(f"{cvar} skipped by the overrides file: {override.get('reason', 'no reason given')}.")
@@ -623,6 +660,7 @@ def cmd_import(args):
             frames.append(("Low again (control)", outlined(result["control"], result["crop"])))
         sections.append({
             "cvar": cvar, "label": labels.get(cvar, cvar), "no_change": result["no_change"],
+            "run": number, "zone": zone, "started": run.get("started"), "build": run.get("build"),
             "share": result["share"], "crop": result["crop"], "size": result["worlds"][0].size,
             "override": bool(override), "frames": frames, "heat": heat(result["signal"]),
             "values_text": " / ".join(str(values[lvl]) for lvl in LEVELS),
@@ -636,10 +674,11 @@ def cmd_import(args):
     (repo / MANIFEST_LUA).write_text(manifest_lua(manifest))
     review = repo / REVIEW
     review.parent.mkdir(parents=True, exist_ok=True)
-    review.write_text(review_html(number, run, sections, problems))
+    review.write_text(review_html(sections, problems))
     for p in problems:
         print("note: " + p)
-    print(f"Imported {len(imported)} settings from run {number}. Review: {REVIEW}")
+    runs_used = sorted({sets[cvar][0] for cvar in imported})
+    print(f"Imported {len(imported)} settings from runs {', '.join(map(str, runs_used)) or 'none'}. Review: {REVIEW}")
     return 0 if imported else 1
 
 

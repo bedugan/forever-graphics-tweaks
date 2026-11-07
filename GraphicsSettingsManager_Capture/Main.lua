@@ -88,6 +88,7 @@ local hooks = {
 	end,
 	skipped = function(step, message)
 		table.insert(session.log.skipped, { cvar = step.setting.cvar, shot = step.shot, message = message })
+		say(string.format("Skipped %s %s: %s", step.setting.label, step.shot, message))
 	end,
 	finish = finish,
 }
@@ -142,6 +143,24 @@ function ns.start(names)
 	if not settings then
 		return false, message
 	end
+	-- Drop a setting now if any level would be refused, rather than shooting
+	-- a partial set. Every shot starts from the live values, so check those.
+	local ready = {}
+	for _, setting in ipairs(settings) do
+		local problem
+		for _, level in ipairs(gsm.levels) do
+			problem = problem or gsm.check(setting.cvar, gsm.levelValue(setting, level))
+		end
+		if problem then
+			say(string.format("Skipping %s. %s Change that in GSM first.", setting.label, problem))
+		else
+			table.insert(ready, setting)
+		end
+	end
+	if #ready == 0 then
+		return false, "Nothing left to capture."
+	end
+	settings = ready
 	local snapshot = gsm.snapshot()
 	local steps = Plan.steps(gsm, settings, snapshot)
 	if #steps == 0 then

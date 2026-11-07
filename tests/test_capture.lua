@@ -303,6 +303,23 @@ test("gsmcap: one setting runs four shots, logs them, and puts everything back",
 	end
 end)
 
+test("gsmcap: a setting with a level over a live limit is dropped before the run, with a reason", function()
+	local _, env = newCapture()
+	env.cap("groundEffectFade")
+	eq(GraphicsSettingsManagerCaptureDB, nil, "no run is logged")
+	truthy(env.chat[#env.chat - 1]:find("Skipping Grass fade start. .*Grass draw distance"), env.chat[#env.chat - 1])
+	truthy(env.chat[#env.chat]:find("Nothing left to capture"))
+	eq(UIParent:IsShown(), true)
+
+	env.cap("groundEffectFade groundEffectDensity")
+	env.shoot(4)
+	local run = GraphicsSettingsManagerCaptureDB.runs[1]
+	eq(run.result, "done")
+	eq(#run.shots, 4)
+	eq(run.shots[1].cvar, "groundEffectDensity")
+	eq(run.labels.groundEffectFade, nil)
+end)
+
 test("gsmcap: Esc, movement, and combat stop the run and restore", function()
 	for _, stop in ipairs({ "esc", "move", "combat" }) do
 		local gsm, env = newCapture()

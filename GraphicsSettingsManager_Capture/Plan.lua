@@ -9,7 +9,7 @@ ns.Plan = Plan
 
 -- Seconds to wait after a change. Delayed settings stream in new terrain
 -- and grass, so they get longer.
-Plan.SETTLE = { immediate = 2, delayed = 6 }
+Plan.SETTLE = { immediate = 2, delayed = 3 }
 -- Extra wait before the first shot, so the camera and mouse are still.
 Plan.LEAD_IN = 3
 

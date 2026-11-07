@@ -55,28 +55,34 @@ local API = {
 	blocked = blocked,
 }
 
+-- Why set would refuse this value right now, or nil. Writes nothing.
+function API.check(cvar, value)
+	local reason = blocked()
+	if reason then
+		return reason
+	end
+	local setting = ns.SettingsByKey[cvar]
+	if not setting then
+		return "Unknown setting " .. tostring(cvar) .. "."
+	end
+	if Store.status(cvar) ~= "available" then
+		return setting.label .. " is " .. Store.status(cvar) .. " on this client."
+	end
+	if type(value) ~= "number" or value < setting.min or value > setting.max then
+		return setting.label .. " value " .. tostring(value) .. " is out of range."
+	end
+	return limitError(setting, value)
+end
+
 -- Writes one setting as a transaction, after capturing the baseline so
 -- Restore Original still works. Returns ok, record or message.
 -- record: { cvar, requested, result, actual }. result "ok" or "clamped".
 function API.set(cvar, value)
-	local reason = blocked()
-	if reason then
-		return false, reason
+	local problem = API.check(cvar, value)
+	if problem then
+		return false, problem
 	end
 	local setting = ns.SettingsByKey[cvar]
-	if not setting then
-		return false, "Unknown setting " .. tostring(cvar) .. "."
-	end
-	if Store.status(cvar) ~= "available" then
-		return false, setting.label .. " is " .. Store.status(cvar) .. " on this client."
-	end
-	if type(value) ~= "number" or value < setting.min or value > setting.max then
-		return false, setting.label .. " value " .. tostring(value) .. " is out of range."
-	end
-	local limit = limitError(setting, value)
-	if limit then
-		return false, limit
-	end
 	ns.Profiles.ensureBaseline()
 	local ok, records, failed = Store.transaction({ { cvar = cvar, value = value } }, Store.readAll())
 	if not ok then

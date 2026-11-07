@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- `/gsmcap` waits 3 seconds after a background setting, down from 6.
+- `/gsmcap` checks every level before it starts. A setting that would break a GSM limit is dropped with a reason in chat, instead of skipping shots silently.
+- The capture import takes each setting from the newest run with a complete set, so one import covers a whole session, and it matches files saved up to 5 seconds before their log entry.
+- `GraphicsSettingsManagerAPI.check` says why `set` would refuse a value, without writing it.
+
 ## 0.1.0 (pre-release), 2026-11-06
 
 First build. Complete and covered by automated tests, but not yet run in the Forever client. Every setting is marked unverified.
