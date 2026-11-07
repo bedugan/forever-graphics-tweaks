@@ -37,6 +37,8 @@ On SteamOS, move the folder with Syncthing, the same way as the main addon.
 ## Capture
 
 1. Set the game's screenshot format to PNG or TGA if you can (`/console screenshotFormat png`). JPEG adds noise that the import has to look past. The companion records the format but does not change it.
+
+   Set Render Scale to 100% in Options > Graphics. Below that, the game draws the world smaller and stretches it, so fine detail blurs. On a Retina Mac it starts at 50%. `/gsmcap` refuses to start below 100% and never changes it for you.
 2. Pick a scene where the setting is easy to see:
 
    | Setting | Scene |

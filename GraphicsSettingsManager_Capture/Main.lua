@@ -143,6 +143,11 @@ function ns.start(names)
 	if IsPlayerMoving() then
 		return false, "Stand still first."
 	end
+	-- Below 100% the world is drawn smaller and stretched, so fine detail blurs.
+	local scale = tonumber(C_CVar.GetCVar("RenderScale"))
+	if scale and scale < 1 then
+		return false, string.format("Render scale is %d%%. Set it to 100%% in Options > Graphics first.", math.floor(scale * 100 + 0.5))
+	end
 	local settings, message = Plan.settings(gsm, names)
 	if not settings then
 		return false, message
