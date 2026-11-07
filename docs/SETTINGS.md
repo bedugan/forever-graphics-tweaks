@@ -16,21 +16,21 @@ Nothing here is verified in the Forever client yet. Ranges and values come from 
 
 | Setting | CVar | Range | Balanced | Ultra | Impact | Timing |
 | --- | --- | --- | --- | --- | --- | --- |
-| View distance level | `graphicsViewDistance` | 0 to 9 | 7 | 9 | high | immediate |
-| Environment detail level | `graphicsEnvironmentDetail` | 0 to 9 | 7 | 9 | medium | immediate |
-| Ground clutter level | `graphicsGroundClutter` | 0 to 9 | 7 | 9 | medium | delayed |
+| View distance level | `graphicsViewDistance` | 0 to 9 | unchanged | 9 | high | immediate |
+| Environment detail level | `graphicsEnvironmentDetail` | 0 to 9 | unchanged | 9 | medium | immediate |
+| Ground clutter level | `graphicsGroundClutter` | 0 to 9 | unchanged | 9 | medium | delayed |
 | Grass density | `groundEffectDensity` | 16 to 256, step 8 | 64 | 128 | medium | delayed |
-| Grass draw distance | `groundEffectDist` | 40 to 500, step 10 | 320 | 450 | medium | delayed |
-| Grass fade start | `groundEffectFade` | 40 to 500, step 10 | 280 | 400 | low | delayed |
+| Grass draw distance | `groundEffectDist` | 40 to 500, step 10 | 270 | 450 | medium | delayed |
+| Grass fade start | `groundEffectFade` | 40 to 500, step 10 | 230 | 400 | low | delayed |
 | Object fade distance | `lodObjectFadeScale` | 50 to 300, step 10 | 150 | 200 | medium | immediate |
-| Small object culling | `lodObjectCullSize` | 4 to 30 | 12 | 8 | medium | immediate |
-| Terrain detail distance | `terrainLodDist` | 200 to 1500, step 25 | 650 | 1000 | medium | delayed |
+| Small object culling | `lodObjectCullSize` | 4 to 30 | unchanged | 8 | medium | immediate |
+| Terrain detail distance | `terrainLodDist` | 200 to 1500, step 25 | unchanged | 1000 | medium | delayed |
 | Horizon detail start | `horizonStart` | 400 to 6000, step 100 | unchanged | unchanged | medium | delayed |
-| Always sharpen | `ResampleAlwaysSharpen` | 0 or 1 | 1 (on) | 1 (on) | low | immediate |
+| Always sharpen | `ResampleAlwaysSharpen` | 0 or 1 | unchanged | 1 (on) | low | immediate |
 | Sharpness | `ResampleSharpness` | 0 to 2, step 0.1 | unchanged | unchanged | low | immediate |
-| Texture filtering | `textureFilteringMode` | 0 to 5 | 4 (8x anisotropic) | 5 (16x anisotropic) | low | immediate |
+| Texture filtering | `textureFilteringMode` | 0 to 5 | unchanged | 5 (16x anisotropic) | low | immediate |
 | Water reflections | `reflectionMode` | 0 to 3 | unchanged | 3 | high | immediate |
-| Shadow cascades | `shadowNumCascades` | 1 to 4 | unchanged | 4 | medium | immediate |
+| Shadow cascades | `shadowNumCascades` | 1 to 4 | 3 | 4 | medium | immediate |
 | Weather density | `weatherDensity` | 0 to 3 | unchanged | 3 | low | immediate |
 
 ## Not managed
@@ -47,7 +47,7 @@ How far the world is drawn. Blizzard quality level. Changing it also resets the 
 
 - CVar: `graphicsViewDistance`
 - Range: 0 to 9
-- Balanced: 7
+- Balanced: unchanged
 - Ultra: 9
 - Estimated impact: high
 - Takes effect: Right away
@@ -59,7 +59,7 @@ Detail of buildings, trees, and props. Blizzard quality level. Changing it also 
 
 - CVar: `graphicsEnvironmentDetail`
 - Range: 0 to 9
-- Balanced: 7
+- Balanced: unchanged
 - Ultra: 9
 - Estimated impact: medium
 - Takes effect: Right away
@@ -71,7 +71,7 @@ Amount and reach of grass and small ground plants. Blizzard quality level. Chang
 
 - CVar: `graphicsGroundClutter`
 - Range: 0 to 9
-- Balanced: 7
+- Balanced: unchanged
 - Ultra: 9
 - Estimated impact: medium
 - Takes effect: As new terrain and ground cover load. Turn the camera or move a short way
@@ -97,7 +97,7 @@ Distance in yards at which grass stops being drawn.
 
 - CVar: `groundEffectDist`
 - Range: 40 to 500, step 10
-- Balanced: 320
+- Balanced: 270
 - Ultra: 450
 - Estimated impact: medium
 - Takes effect: As new terrain and ground cover load. Turn the camera or move a short way
@@ -110,7 +110,7 @@ Distance where grass starts fading out. Must not exceed grass draw distance.
 - CVar: `groundEffectFade`
 - Range: 40 to 500, step 10
 - Constraint: must not exceed `groundEffectDist`
-- Balanced: 280
+- Balanced: 230
 - Ultra: 400
 - Estimated impact: low
 - Takes effect: As new terrain and ground cover load. Turn the camera or move a short way
@@ -137,7 +137,7 @@ Objects smaller than this on screen get hidden. Lower values keep more small obj
 - CVar: `lodObjectCullSize`
 - Range: 4 to 30
 - Direction: lower values mean more detail, so GSM's slider runs right to left
-- Balanced: 12
+- Balanced: unchanged
 - Ultra: 8
 - Estimated impact: medium
 - Takes effect: Right away
@@ -149,7 +149,7 @@ Distance at which terrain switches to its simpler shape. Higher keeps hills and 
 
 - CVar: `terrainLodDist`
 - Range: 200 to 1500, step 25
-- Balanced: 650
+- Balanced: unchanged
 - Ultra: 1000
 - Estimated impact: medium
 - Takes effect: As new terrain and ground cover load. Turn the camera or move a short way
@@ -176,7 +176,7 @@ Applies the sharpening pass even at 100% render scale. Needed for Sharpness to h
 
 - CVar: `ResampleAlwaysSharpen`
 - Range: 0 or 1
-- Balanced: 1 (on)
+- Balanced: unchanged
 - Ultra: 1 (on)
 - Estimated impact: low
 - Takes effect: Right away
@@ -202,7 +202,7 @@ Keeps ground and wall textures crisp at steep viewing angles.
 - CVar: `textureFilteringMode`
 - Range: 0 to 5
 - Values: 0 Bilinear, 1 Trilinear, 2 2x anisotropic, 3 4x anisotropic, 4 8x anisotropic, 5 16x anisotropic
-- Balanced: 4 (8x anisotropic)
+- Balanced: unchanged
 - Ultra: 5 (16x anisotropic)
 - Estimated impact: low
 - Takes effect: Right away
@@ -228,7 +228,7 @@ Number of shadow detail bands. More bands keep distant shadows sharper. Blizzard
 
 - CVar: `shadowNumCascades`
 - Range: 1 to 4
-- Balanced: unchanged
+- Balanced: 3
 - Ultra: 4
 - Estimated impact: medium
 - Takes effect: Right away
