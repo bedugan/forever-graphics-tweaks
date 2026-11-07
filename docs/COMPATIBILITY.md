@@ -36,6 +36,10 @@ What GSM relies on, where each fact came from, and what still needs testing insi
 | `GetBuildInfo` | Diagnostics | Source | Pending |
 | `UISpecialFrames` | Esc closes the GSM window | Source | Pending |
 | `EnableGamePadButton`, `OnGamePadButtonDown` | Controller Keep and Revert on the overlay | Source | Pending |
+| `Screenshot()`, `SCREENSHOT_SUCCEEDED`, `SCREENSHOT_FAILED` | Capture companion only | Source | Pending |
+| `SetUIVisibility(false)` | Capture companion hides the UI. Wrapped in `pcall`, falls back to asking for Alt+Z | Source. Not known whether addons may call it on Forever | Pending |
+| `SetPropagateKeyboardInput` | Capture companion catches Esc and passes other keys on | Source | Pending |
+| Frames parented to `WorldFrame` | Caption band stays visible while the UI is hidden | Source and wiki | Pending |
 
 ## SavedVariables
 
@@ -45,7 +49,7 @@ What GSM relies on, where each fact came from, and what still needs testing insi
 ## Textures
 
 - GSM 0.1.0 ships no image files. Schematics use `SetColorTexture` and `CreateLine`.
-- For future screenshots: TGA, 32-bit, power-of-two sides (for example 512 by 256). BLP also works. PNG support is not verified on Forever, so GSM does not rely on it.
+- Screenshots from the import are TGA, 32-bit, 512 by 256, with the picture in the top 184 rows shown through `SetTexCoord`. BLP also works. PNG textures are not verified on Forever, so GSM does not rely on them. The game's own screenshot files can be JPEG, PNG, or TGA. The import reads all three.
 
 ## CVars
 

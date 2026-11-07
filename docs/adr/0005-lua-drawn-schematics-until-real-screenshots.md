@@ -1,6 +1,6 @@
 # 5. Lua-drawn schematics until real screenshots exist
 
-Date: 2026-11-06. Status: accepted.
+Date: 2026-11-06. Status: accepted. The manual capture process is replaced by ADR 0007.
 
 ## Context
 

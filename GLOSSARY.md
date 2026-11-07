@@ -41,4 +41,15 @@ Terms used in code, docs, and issues for Graphics Settings Manager (GSM).
 
 - **Comparison**: the Low, Medium, High panel for one setting.
 - **Schematic**: a Lua-drawn diagram labeled as an illustration, used when no real screenshot exists.
-- **Manifest**: `Media/Manifest.lua`, which lists packaged screenshots per setting and level.
+- **Manifest**: `Media/Manifest.lua`, which lists packaged screenshots per setting and level. Generated from `assets/screenshots.json` by the import.
+- **Level value**: the value GSM uses for a setting at Low, Medium, or High: the bottom, middle, and top of its range.
+
+## Capture
+
+- **Companion**: the developer-only addon `GraphicsSettingsManager_Capture`. It takes comparison screenshots through GSM's public API.
+- **Capture run**: one `/gsmcap` command. It snapshots the live values, shoots each chosen setting, then restores the snapshot.
+- **Control shot**: a second Low shot after High. Areas that differ between the two Low shots changed on their own, so the import ignores them.
+- **Caption band**: the strip along the bottom of each capture screenshot that names the setting, the shot, and its values. The import cuts it off.
+- **Crop**: the part of a screenshot the panel shows, chosen by the import at the panel's 390 by 140 shape.
+- **Focus box**: an outline in the panel around the area that changed most, when that area is small.
+- **Override**: a hand-set crop, focus, or note in `assets/screenshots-overrides.json`.
