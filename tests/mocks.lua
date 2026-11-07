@@ -80,7 +80,7 @@ function newCVars(opts)
 		end
 		return true
 	end
-	-- Something outside FGT changing a value.
+	-- Something outside GSM changing a value.
 	function cvars.external(name, value)
 		raw(name, value)
 	end
@@ -125,8 +125,8 @@ function newAddon(opts)
 	}
 	env.experience = opts.experience
 	for _, file in ipairs(opts.files or CORE_FILES) do
-		local chunk = assert(loadfile(ROOT .. "/ForeverGraphicsTweaks/" .. file))
-		chunk("ForeverGraphicsTweaks", ns)
+		local chunk = assert(loadfile(ROOT .. "/GraphicsSettingsManager/" .. file))
+		chunk("GraphicsSettingsManager", ns)
 	end
 	return ns, env
 end

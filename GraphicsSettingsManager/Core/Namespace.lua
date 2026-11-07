@@ -9,10 +9,10 @@ ns.interface = 16001
 local function savedVariables()
 	-- Read the global every time. Forever beta clients have delivered
 	-- SavedVariables late or not at all, so never cache the table.
-	local db = ForeverGraphicsTweaksDB
+	local db = GraphicsSettingsManagerDB
 	if type(db) ~= "table" then
 		db = {}
-		ForeverGraphicsTweaksDB = db
+		GraphicsSettingsManagerDB = db
 	end
 	db.profiles = db.profiles or {}
 	db.ui = db.ui or {}
@@ -29,7 +29,7 @@ ns.api = ns.api or {
 	buildInfo = GetBuildInfo,
 	db = savedVariables,
 	print = function(msg)
-		DEFAULT_CHAT_FRAME:AddMessage("|cff4fc3f7FGT|r " .. msg)
+		DEFAULT_CHAT_FRAME:AddMessage("|cff4fc3f7GSM|r " .. msg)
 	end,
 	reportError = function(err)
 		geterrorhandler()(err)

@@ -1,15 +1,15 @@
 # Glossary
 
-Terms used in code, docs, and issues for Forever Graphics Tweaks (FGT).
+Terms used in code, docs, and issues for Graphics Settings Manager (GSM).
 
 ## Settings and values
 
 - **Setting**: one entry in `Core/Definitions.lua`. It maps to exactly one CVar and carries its label, range, preset values, timing, and evidence.
-- **CVar**: a client console variable read and written through `C_CVar`. FGT only touches CVars listed in Definitions.
+- **CVar**: a client console variable read and written through `C_CVar`. GSM only touches CVars listed in Definitions.
 - **Live value**: what `C_CVar.GetCVar` returns right now.
-- **Pending value**: a value the user picked in the FGT window that has not been applied. Pending values never change the game.
-- **Native default**: what `C_CVar.GetCVarDefault` returns for a CVar. The Default preset uses these at runtime. FGT never hard-codes them.
-- **Baseline**: the live values FGT captured the first time it wrote any CVar. Restore Original puts these back. Not the same as native defaults.
+- **Pending value**: a value the user picked in the GSM window that has not been applied. Pending values never change the game.
+- **Native default**: what `C_CVar.GetCVarDefault` returns for a CVar. The Default preset uses these at runtime. GSM never hard-codes them.
+- **Baseline**: the live values GSM captured the first time it wrote any CVar. Restore Original puts these back. Not the same as native defaults.
 - **Tier**: apply order. Tier 1 is Blizzard's quality-level parents (`graphicsViewDistance`, `graphicsEnvironmentDetail`, `graphicsGroundClutter`). Tier 2 is everything else. Parents go first because changing a parent rewrites its children.
 - **Status**: how a CVar looks on this client. `available`, `missing` (the client does not know it), or `restricted` (read-only, secure, or locked).
 - **Write result**: what readback showed after a write. `ok`, `clamped` (the client stored a different value), `rejected` (value unchanged), or `error` (the call threw).
@@ -23,7 +23,7 @@ Terms used in code, docs, and issues for Forever Graphics Tweaks (FGT).
 
 ## Preview
 
-- **Preview** (or **test**): a timed trial of pending values. FGT validates, snapshots, applies, reads back, then shows the countdown overlay.
+- **Preview** (or **test**): a timed trial of pending values. GSM validates, snapshots, applies, reads back, then shows the countdown overlay.
 - **Snapshot**: the live values of every available managed CVar, captured just before a preview applies.
 - **Applied map**: live values read right after a preview applies. Revert leaves alone any CVar whose live value no longer matches it.
 - **Keep**: accept the previewed values. They become the live configuration.
@@ -35,7 +35,7 @@ Terms used in code, docs, and issues for Forever Graphics Tweaks (FGT).
 ## Experience
 
 - **Experience preset**: the Forever account choice between Classic and Enhanced presentation, read from `C_GameRules.GetForeverExperiencePreset()`.
-- **Classic** = `Enum.ForeverExperiencePreset.Classic` (0). **Enhanced** = `Enum.ForeverExperiencePreset.Enhanced` (1). **Unknown** means the API is missing, errored, or returned something else. FGT reads this and never writes it.
+- **Classic** = `Enum.ForeverExperiencePreset.Classic` (0). **Enhanced** = `Enum.ForeverExperiencePreset.Enhanced` (1). **Unknown** means the API is missing, errored, or returned something else. GSM reads this and never writes it.
 
 ## Visuals
 

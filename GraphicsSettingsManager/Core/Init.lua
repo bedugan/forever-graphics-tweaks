@@ -1,4 +1,4 @@
--- Events, chat messages, and the /fgt command. Loaded last.
+-- Events, chat messages, and the /gsm command. Loaded last.
 -- Nothing here writes a CVar at load or login.
 local _, ns = ...
 
@@ -43,7 +43,7 @@ ns.on("PREVIEW_ENDED", function(reason, records, skipped)
 		table.insert(failed, record.cvar)
 	end
 	if #failed > 0 then
-		ns.print("Could not put these back: " .. names(failed) .. ". Run /fgt diag.")
+		ns.print("Could not put these back: " .. names(failed) .. ". Run /gsm diag.")
 	end
 end)
 
@@ -70,13 +70,13 @@ events:SetScript("OnEvent", function(_, event, ...)
 end)
 
 local help = {
-	"/fgt  open or close the window",
-	"/fgt diag  print a read-only compatibility report",
-	"/fgt revert  end a running test and put the old values back",
+	"/gsm  open or close the window",
+	"/gsm diag  print a read-only compatibility report",
+	"/gsm revert  end a running test and put the old values back",
 }
 
-SLASH_FOREVERGRAPHICSTWEAKS1 = "/fgt"
-SlashCmdList.FOREVERGRAPHICSTWEAKS = function(msg)
+SLASH_GRAPHICSSETTINGSMANAGER1 = "/gsm"
+SlashCmdList.GRAPHICSSETTINGSMANAGER = function(msg)
 	local command = (msg or ""):match("^%s*(.-)%s*$"):lower()
 	if command == "" then
 		ns.MainWindow.toggle()

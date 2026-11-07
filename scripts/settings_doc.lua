@@ -2,7 +2,7 @@
 -- Usage: lua scripts/settings_doc.lua [root] > docs/SETTINGS.md
 local root = arg[1] or "."
 local ns = {}
-assert(loadfile(root .. "/ForeverGraphicsTweaks/Core/Definitions.lua"))("ForeverGraphicsTweaks", ns)
+assert(loadfile(root .. "/GraphicsSettingsManager/Core/Definitions.lua"))("GraphicsSettingsManager", ns)
 
 local out = {}
 local function add(line)
@@ -45,17 +45,17 @@ end
 
 add("# Settings")
 add()
-add("Every graphics setting FGT manages. This file is generated from `ForeverGraphicsTweaks/Core/Definitions.lua` by `scripts/settings_doc.lua`. Edit the definitions, then regenerate.")
+add("Every graphics setting GSM manages. This file is generated from `GraphicsSettingsManager/Core/Definitions.lua` by `scripts/settings_doc.lua`. Edit the definitions, then regenerate.")
 add()
 add("Nothing here is verified in the Forever client yet. Ranges and values come from the evidence listed for each setting. Impact is an estimate, not a measurement.")
 add()
 add("## How to read this")
 add()
-add("- **Range** is what FGT allows. The client may clamp further. FGT reads the value back after every write and reports a clamp.")
-add("- **Game default** is not listed. FGT reads it from the client at runtime with `C_CVar.GetCVarDefault`, because defaults can change between builds. The Default preset uses it.")
+add("- **Range** is what GSM allows. The client may clamp further. GSM reads the value back after every write and reports a clamp.")
+add("- **Game default** is not listed. GSM reads it from the client at runtime with `C_CVar.GetCVarDefault`, because defaults can change between builds. The Default preset uses it.")
 add("- **Balanced** and **Ultra** are raw CVar values. \"unchanged\" means the preset leaves the setting alone.")
 add("- **Timing** is when the change shows on screen. None of these settings is documented as needing a reload or restart, so every one can use the 15 second test. The in-game checklist confirms this.")
-add("- Quality levels (tier 1) use the raw range 0 to 9. Blizzard and FGT show them as 1 to 10. Changing one rewrites the detailed values it controls, so FGT applies tier 1 first.")
+add("- Quality levels (tier 1) use the raw range 0 to 9. Blizzard and GSM show them as 1 to 10. Changing one rewrites the detailed values it controls, so GSM applies tier 1 first.")
 add()
 add("## Summary")
 add()
@@ -68,8 +68,8 @@ end
 add()
 add("## Not managed")
 add()
-add("- `SSAOType`: excluded. Its values are undocumented for this build, so FGT cannot validate them.")
-add("- Raid graphics mirrors (`RAID*`): left alone. `/fgt diag` reports whether raid settings are enabled.")
+add("- `SSAOType`: excluded. Its values are undocumented for this build, so GSM cannot validate them.")
+add("- Raid graphics mirrors (`RAID*`): left alone. `/gsm diag` reports whether raid settings are enabled.")
 add("- Resolution, graphics API, refresh rate, display device, and character models: out of scope.")
 
 local current
@@ -94,7 +94,7 @@ for _, s in ipairs(ns.Settings) do
 		add("- Values: " .. table.concat(labels, ", "))
 	end
 	if s.reverse then
-		add("- Direction: lower values mean more detail, so FGT's slider runs right to left")
+		add("- Direction: lower values mean more detail, so GSM's slider runs right to left")
 	end
 	if s.lessThan then
 		add("- Constraint: must stay below `" .. s.lessThan .. "`")

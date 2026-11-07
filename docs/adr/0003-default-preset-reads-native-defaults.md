@@ -8,7 +8,7 @@ The Default preset should use the client's native defaults. Hard-coding Retail n
 
 ## Decision
 
-The Default preset has no numbers in Definitions. When the user picks it, FGT fills pending values from `C_CVar.GetCVarDefault` for each available setting. Settings whose default cannot be read stay unchanged.
+The Default preset has no numbers in Definitions. When the user picks it, GSM fills pending values from `C_CVar.GetCVarDefault` for each available setting. Settings whose default cannot be read stay unchanged.
 
 ## Consequences
 

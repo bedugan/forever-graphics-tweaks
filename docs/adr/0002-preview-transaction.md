@@ -14,13 +14,13 @@ Starting a preview:
 
 1. Refuse in combat or when another preview is active.
 2. Validate every pending value against Definitions and current CVar status. Any invalid value aborts before writing.
-3. Capture the baseline if this is FGT's first write (ADR 0004).
+3. Capture the baseline if this is GSM's first write (ADR 0004).
 4. Snapshot live values for every available managed setting.
 5. Apply tier 1 then tier 2. Read back after each write.
 6. If any write errors or is rejected, write the snapshot back and report which setting failed. Clamped values are accepted and reported in chat.
 7. Read every managed value again (the "applied" map), then start the countdown. The deadline is `clock() + 15` using an injected clock (`GetTime` in game). An unparented driver frame checks it from `OnUpdate`, so hiding the UI does not stall it. Frame count is never used.
 
-Revert first decides which CVars are still FGT's: any CVar whose live value no longer matches the applied map was changed by something else and is left alone. It then writes the snapshot back in tier order, re-reading each value just before writing, because reverting a parent rewrites its children. Timeout calls Revert. Nothing commits without a Keep click.
+Revert first decides which CVars are still GSM's: any CVar whose live value no longer matches the applied map was changed by something else and is left alone. It then writes the snapshot back in tier order, re-reading each value just before writing, because reverting a parent rewrites its children. Timeout calls Revert. Nothing commits without a Keep click.
 
 `PLAYER_LOGOUT` (which also fires on reload) reverts an active preview, so the client saves the pre-test values.
 
@@ -32,4 +32,4 @@ The first draft wrote the snapshot to SavedVariables before applying, to detect 
 
 - No silent commits. Every exit path except Keep restores the snapshot.
 - After a hard crash during a test, the outcome depends on when the client last wrote `Config.wtf`. If it writes only on exit, the pre-test values survive. This is unverified and listed in the smoke test. Docs must not promise crash recovery.
-- Skipping externally changed CVars means Revert can be partial. Chat reports which ones FGT left alone.
+- Skipping externally changed CVars means Revert can be partial. Chat reports which ones GSM left alone.

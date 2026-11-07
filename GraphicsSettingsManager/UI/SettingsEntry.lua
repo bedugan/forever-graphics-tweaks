@@ -23,10 +23,10 @@ end
 
 local function open()
 	if ns.api.inCombat() then
-		ns.print("The FGT window is not available in combat.")
+		ns.print("The GSM window is not available in combat.")
 		return
 	end
-	-- Hide Settings first so the game world and the FGT window are not
+	-- Hide Settings first so the game world and the GSM window are not
 	-- stacked behind it. Called from a click, out of combat.
 	if SettingsPanel and SettingsPanel:IsShown() then
 		pcall(HideUIPanel, SettingsPanel)
@@ -36,7 +36,7 @@ end
 
 local function build()
 	canvas = CreateFrame("Frame")
-	local title = W.text(canvas, "GameFontNormalLarge", "Forever Graphics Tweaks")
+	local title = W.text(canvas, "GameFontNormalLarge", "Graphics Settings Manager")
 	title:SetPoint("TOPLEFT", 16, -16)
 	local body = W.text(canvas, "GameFontHighlight",
 		"Graphics presets and individual settings, with a 15 second test before anything sticks. "
@@ -45,10 +45,10 @@ local function build()
 	body:SetWidth(560)
 	body:SetSpacing(2)
 
-	local button = W.button(canvas, "Open Forever Graphics Tweaks", 240, open)
+	local button = W.button(canvas, "Open Graphics Settings Manager", 240, open)
 	button:SetPoint("TOPLEFT", body, "BOTTOMLEFT", 0, -16)
 
-	local hint = W.text(canvas, "GameFontDisableSmall", "You can also type /fgt.")
+	local hint = W.text(canvas, "GameFontDisableSmall", "You can also type /gsm.")
 	hint:SetPoint("TOPLEFT", button, "BOTTOMLEFT", 2, -8)
 
 	canvas.status = W.text(canvas, "GameFontHighlightSmall")
@@ -64,7 +64,7 @@ function SettingsEntry.register()
 		return
 	end
 	build()
-	local category = Settings.RegisterCanvasLayoutCategory(canvas, "Forever Graphics Tweaks")
+	local category = Settings.RegisterCanvasLayoutCategory(canvas, "Graphics Settings Manager")
 	Settings.RegisterAddOnCategory(category)
 	SettingsEntry.category = category
 end

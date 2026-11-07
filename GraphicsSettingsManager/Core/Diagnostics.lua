@@ -1,4 +1,4 @@
--- Read-only report for /fgt diag. Never writes a CVar.
+-- Read-only report for /gsm diag. Never writes a CVar.
 local _, ns = ...
 
 local Store = ns.CVarStore
@@ -20,7 +20,7 @@ function Diagnostics.lines()
 	if api.buildInfo then
 		version, build, _, toc = api.buildInfo()
 	end
-	add("Forever Graphics Tweaks %s", ns.version)
+	add("Graphics Settings Manager %s", ns.version)
 	add("Client %s (%s), interface %s, addon expects %d", tostring(version), tostring(build), tostring(toc), ns.interface)
 
 	local foreverApi = api.gameRules and api.gameRules.GetForeverExperiencePreset ~= nil
@@ -33,7 +33,7 @@ function Diagnostics.lines()
 		add("%s = %s", cvar, tostring(Store.get(cvar)))
 	end
 	if Store.get("RAIDsettingsEnabled") == 1 then
-		add("Raid graphics settings are on. FGT does not manage the raid copies.")
+		add("Raid graphics settings are on. GSM does not manage the raid copies.")
 	end
 
 	local counts = { available = 0, missing = 0, restricted = 0 }

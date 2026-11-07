@@ -1,9 +1,9 @@
 #!/bin/sh
-# Builds dist/ForeverGraphicsTweaks-<version>.zip with the addon folder at
+# Builds dist/GraphicsSettingsManager-<version>.zip with the addon folder at
 # the top level, ready to unzip into Interface/AddOns.
 set -eu
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
-ADDON=ForeverGraphicsTweaks
+ADDON=GraphicsSettingsManager
 
 VERSION=$(sed -n 's/^## Version: *//p' "$ROOT/$ADDON/$ADDON.toc" | tr -d '\r')
 CODE_VERSION=$(sed -n 's/^ns.version = "\(.*\)"/\1/p' "$ROOT/$ADDON/Core/Namespace.lua")

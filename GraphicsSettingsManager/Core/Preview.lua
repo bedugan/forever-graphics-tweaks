@@ -60,7 +60,7 @@ function Preview.start()
 		local label = ns.SettingsByKey[failed.cvar].label
 		local message = label .. " was " .. failed.result .. " by the game. All changes were undone."
 		if #failures(rollback) > 0 then
-			message = label .. " was " .. failed.result .. " by the game, and some values could not be put back. Run /fgt diag."
+			message = label .. " was " .. failed.result .. " by the game, and some values could not be put back. Run /gsm diag."
 		end
 		ns.emit("PREVIEW_FAILED", message, records, rollback)
 		return false, message, records
@@ -88,7 +88,7 @@ function Preview.keep()
 end
 
 -- Put the snapshot back. Skips any CVar that something else changed
--- after FGT applied it. reason: "manual" | "timeout" | "logout" | "slash".
+-- after GSM applied it. reason: "manual" | "timeout" | "logout" | "slash".
 function Preview.revert(reason)
 	if not state then
 		return false

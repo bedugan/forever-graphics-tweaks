@@ -117,7 +117,7 @@ end
 
 local function tocFiles()
 	local out = {}
-	for line in io.lines(ROOT .. "/ForeverGraphicsTweaks/ForeverGraphicsTweaks.toc") do
+	for line in io.lines(ROOT .. "/GraphicsSettingsManager/GraphicsSettingsManager.toc") do
 		line = line:match("^%s*(.-)%s*$")
 		if line ~= "" and not line:find("^#") then
 			table.insert(out, (line:gsub("\\", "/")))
@@ -153,26 +153,26 @@ local function newUI(opts)
 	opts.files = tocFiles()
 	local ns, env = newAddon(opts)
 	fire("PLAYER_LOGIN")
-	env.slash = SlashCmdList.FOREVERGRAPHICSTWEAKS
+	env.slash = SlashCmdList.GRAPHICSSETTINGSMANAGER
 	return ns, env
 end
 
 local function window()
-	return ForeverGraphicsTweaksFrame
+	return GraphicsSettingsManagerFrame
 end
 local function overlay()
-	return ForeverGraphicsTweaksOverlay
+	return GraphicsSettingsManagerOverlay
 end
 
 test("ui: TOC loads every file and login writes nothing", function()
 	local ns, env = newUI()
 	eq(#env.cvars.writes, 0)
 	eq(env.db.loads, 1)
-	eq(Settings.registered.name, "Forever Graphics Tweaks")
+	eq(Settings.registered.name, "Graphics Settings Manager")
 	truthy(ns.MainWindow and ns.Overlay and ns.Comparison and ns.SettingsEntry)
 end)
 
-test("ui: /fgt opens the window; presets stay pending", function()
+test("ui: /gsm opens the window; presets stay pending", function()
 	local ns, env = newUI()
 	env.slash("")
 	truthy(window():IsShown())
@@ -182,7 +182,7 @@ test("ui: /fgt opens the window; presets stay pending", function()
 	eq(#env.cvars.writes, 0, "choosing a preset writes nothing")
 	truthy(find("Test settings"):IsEnabled())
 	env.slash("")
-	eq(window():IsShown(), false, "/fgt toggles")
+	eq(window():IsShown(), false, "/gsm toggles")
 end)
 
 test("ui: Test hides windows, overlay times out and reverts, window returns", function()
@@ -330,9 +330,9 @@ test("ui: Restore original asks first, then restores the baseline", function()
 	eq(env.cvars.value("reflectionMode"), 3)
 	env.slash("")
 	find("Restore original"):Click()
-	truthy(ForeverGraphicsTweaksConfirm:IsShown())
+	truthy(GraphicsSettingsManagerConfirm:IsShown())
 	eq(env.cvars.value("reflectionMode"), 3, "nothing before confirming")
-	ForeverGraphicsTweaksConfirm.accept:Click()
+	GraphicsSettingsManagerConfirm.accept:Click()
 	eq(env.cvars.value("reflectionMode"), 0)
 	eq(env.cvars.value("graphicsViewDistance"), 5)
 end)
@@ -357,7 +357,7 @@ test("ui: profiles save, load into pending, and delete", function()
 	eq(#env.cvars.writes, 0, "loading a profile writes nothing")
 	find("Delete"):Click()
 	truthy(env.db.profiles["SteamOS Ultra"], "nothing before confirming")
-	ForeverGraphicsTweaksConfirm.accept:Click()
+	GraphicsSettingsManagerConfirm.accept:Click()
 	eq(env.db.profiles["SteamOS Ultra"], nil)
 end)
 
@@ -375,7 +375,7 @@ test("ui: Settings launcher hides Settings and opens the window", function()
 	local _, env = newUI()
 	SettingsPanel:Show()
 	Settings.registered.frame:fire("OnShow")
-	find("Open Forever Graphics Tweaks"):Click()
+	find("Open Graphics Settings Manager"):Click()
 	eq(SettingsPanel:IsShown(), false)
 	truthy(window():IsShown())
 	eq(#env.cvars.writes, 0)

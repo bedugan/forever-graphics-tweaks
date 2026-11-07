@@ -1,4 +1,4 @@
--- Baseline (the player's settings before FGT's first write), Restore
+-- Baseline (the player's settings before GSM's first write), Restore
 -- Original, and named profiles. Profiles only fill pending values.
 local _, ns = ...
 
@@ -59,7 +59,7 @@ function Profiles.restoreOriginal()
 	end
 	local baseline = Profiles.baseline()
 	if not baseline then
-		return false, "Nothing to restore. FGT has not changed any settings yet."
+		return false, "Nothing to restore. GSM has not changed any settings yet."
 	end
 	-- Pass every baseline value, not only the ones that differ now: a
 	-- restored quality-level parent rewrites children that already matched.

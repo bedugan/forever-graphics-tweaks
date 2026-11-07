@@ -1,4 +1,4 @@
--- Every setting FGT manages, and every preset value, lives in this file.
+-- Every setting GSM manages, and every preset value, lives in this file.
 -- Nothing else in the addon hard-codes CVar names or numbers.
 --
 -- Fields:
@@ -14,7 +14,7 @@
 --   presets     balanced/ultra values. Missing means "leave unchanged".
 --               The Default preset reads C_CVar.GetCVarDefault at runtime.
 --   lessThan    Another CVar this value must stay below (pending value if
---               FGT manages it, otherwise the live value).
+--               GSM manages it, otherwise the live value).
 --   atMost      Same as lessThan but allows equality.
 --   impact      Estimated FPS cost: "low" | "medium" | "high". Not measured.
 --   timing      "immediate" | "delayed" (needs camera movement or new terrain
@@ -40,7 +40,7 @@ ns.Presets = {
 	{ key = "custom", label = "Custom", tip = "Your own adjustments." },
 }
 
-local QUALITY_LEVEL = "Blizzard quality level. Changing it also resets the detailed values it controls, so FGT applies it first."
+local QUALITY_LEVEL = "Blizzard quality level. Changing it also resets the detailed values it controls, so GSM applies it first."
 
 ns.Settings = {
 	-- Quality levels (tier 1). Range 0-9, Blizzard shows 1-10.

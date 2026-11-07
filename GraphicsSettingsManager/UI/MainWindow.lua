@@ -1,4 +1,4 @@
--- The FGT window: presets, the setting list, the detail pane with its
+-- The GSM window: presets, the setting list, the detail pane with its
 -- comparison panel, profiles, and the Test / Discard / Restore actions.
 -- Nothing here writes a CVar except through Preview.start and
 -- Profiles.restoreOriginal, both started by a click.
@@ -249,7 +249,7 @@ local function refreshDetail()
 		"Evidence: " .. EVIDENCE[setting.evidence] .. ". Not yet verified in game.",
 	}
 	if status ~= "available" then
-		table.insert(lines, 1, W.hex(W.colors.error) .. "This setting is " .. status .. " on this client, so FGT will not change it.|r")
+		table.insert(lines, 1, W.hex(W.colors.error) .. "This setting is " .. status .. " on this client, so GSM will not change it.|r")
 	end
 	pane.info:SetText(table.concat(lines, "\n"))
 	pane.comparison:show(setting, value)
@@ -421,12 +421,12 @@ end
 local function restoreOriginal()
 	local baseline = ns.Profiles.baseline()
 	if not baseline then
-		setStatus("Nothing to restore. FGT has not changed any settings yet.")
+		setStatus("Nothing to restore. GSM has not changed any settings yet.")
 		return
 	end
 	ns.Dialogs.confirm({
 		title = "Restore original settings?",
-		text = "This puts back the graphics values you had before FGT first changed anything ("
+		text = "This puts back the graphics values you had before GSM first changed anything ("
 			.. date("%Y-%m-%d %H:%M", baseline.captured)
 			.. "). There is no countdown. Pending values are cleared.",
 		accept = "Restore",
@@ -454,7 +454,7 @@ local function buildFooter()
 	W.tooltip(ui.discard, "Discard", "Drop all pending values. Live settings stay as they are.")
 	ui.restore = W.button(frame, "Restore original", 130, restoreOriginal)
 	ui.restore:SetPoint("RIGHT", ui.discard, "LEFT", -6, 0)
-	W.tooltip(ui.restore, "Restore original", "Put back the values you had before FGT first changed anything. Asks first.")
+	W.tooltip(ui.restore, "Restore original", "Put back the values you had before GSM first changed anything. Asks first.")
 	ui.profilesButton = W.button(frame, "Profiles", 90, function()
 		view = view == "profiles" and "detail" or "profiles"
 		MainWindow.refresh()
@@ -522,12 +522,12 @@ end
 ------------------------------------------------------------------------
 
 local function build()
-	frame = CreateFrame("Frame", "ForeverGraphicsTweaksFrame", UIParent, "DefaultPanelFlatTemplate")
+	frame = CreateFrame("Frame", "GraphicsSettingsManagerFrame", UIParent, "DefaultPanelFlatTemplate")
 	frame:SetSize(WIDTH, HEIGHT)
 	frame:SetFrameStrata("HIGH")
 	frame:SetToplevel(true)
 	frame:EnableMouse(true)
-	frame:SetTitle("Forever Graphics Tweaks")
+	frame:SetTitle("Graphics Settings Manager")
 	W.rememberPosition(frame, "main", { "CENTER", UIParent, "CENTER", 0, 0 })
 	local close = CreateFrame("Button", nil, frame, "UIPanelCloseButton")
 	close:SetPoint("TOPRIGHT", 0, 0)
@@ -597,11 +597,11 @@ end
 
 function MainWindow.show()
 	if ns.api.inCombat() then
-		ns.print("The FGT window is not available in combat.")
+		ns.print("The GSM window is not available in combat.")
 		return false
 	end
 	if ns.Preview.isActive() then
-		ns.print("Finish the current test first. Use the Keep or Revert buttons, or /fgt revert.")
+		ns.print("Finish the current test first. Use the Keep or Revert buttons, or /gsm revert.")
 		return false
 	end
 	if not frame then

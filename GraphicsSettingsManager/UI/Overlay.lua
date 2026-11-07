@@ -61,7 +61,7 @@ local function summary(records)
 end
 
 local function build()
-	frame = CreateFrame("Frame", "ForeverGraphicsTweaksOverlay", UIParent, "BackdropTemplate")
+	frame = CreateFrame("Frame", "GraphicsSettingsManagerOverlay", UIParent, "BackdropTemplate")
 	frame:SetSize(320, 150)
 	frame:SetFrameStrata("DIALOG")
 	frame:SetToplevel(true)

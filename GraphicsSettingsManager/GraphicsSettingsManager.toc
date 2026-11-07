@@ -1,9 +1,9 @@
 ## Interface: 16001
-## Title: Forever Graphics Tweaks
+## Title: Graphics Settings Manager
 ## Notes: Preview advanced graphics settings safely, with a 15 second keep-or-revert timer.
 ## Author: Brian Dugan
 ## Version: 0.1.0
-## SavedVariables: ForeverGraphicsTweaksDB
+## SavedVariables: GraphicsSettingsManagerDB
 ## IconTexture: Interface\Icons\INV_Misc_Spyglass_03
 ## Category: Graphics
 

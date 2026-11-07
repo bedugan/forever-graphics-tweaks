@@ -1,16 +1,16 @@
 # Settings
 
-Every graphics setting FGT manages. This file is generated from `ForeverGraphicsTweaks/Core/Definitions.lua` by `scripts/settings_doc.lua`. Edit the definitions, then regenerate.
+Every graphics setting GSM manages. This file is generated from `GraphicsSettingsManager/Core/Definitions.lua` by `scripts/settings_doc.lua`. Edit the definitions, then regenerate.
 
 Nothing here is verified in the Forever client yet. Ranges and values come from the evidence listed for each setting. Impact is an estimate, not a measurement.
 
 ## How to read this
 
-- **Range** is what FGT allows. The client may clamp further. FGT reads the value back after every write and reports a clamp.
-- **Game default** is not listed. FGT reads it from the client at runtime with `C_CVar.GetCVarDefault`, because defaults can change between builds. The Default preset uses it.
+- **Range** is what GSM allows. The client may clamp further. GSM reads the value back after every write and reports a clamp.
+- **Game default** is not listed. GSM reads it from the client at runtime with `C_CVar.GetCVarDefault`, because defaults can change between builds. The Default preset uses it.
 - **Balanced** and **Ultra** are raw CVar values. "unchanged" means the preset leaves the setting alone.
 - **Timing** is when the change shows on screen. None of these settings is documented as needing a reload or restart, so every one can use the 15 second test. The in-game checklist confirms this.
-- Quality levels (tier 1) use the raw range 0 to 9. Blizzard and FGT show them as 1 to 10. Changing one rewrites the detailed values it controls, so FGT applies tier 1 first.
+- Quality levels (tier 1) use the raw range 0 to 9. Blizzard and GSM show them as 1 to 10. Changing one rewrites the detailed values it controls, so GSM applies tier 1 first.
 
 ## Summary
 
@@ -35,15 +35,15 @@ Nothing here is verified in the Forever client yet. Ranges and values come from 
 
 ## Not managed
 
-- `SSAOType`: excluded. Its values are undocumented for this build, so FGT cannot validate them.
-- Raid graphics mirrors (`RAID*`): left alone. `/fgt diag` reports whether raid settings are enabled.
+- `SSAOType`: excluded. Its values are undocumented for this build, so GSM cannot validate them.
+- Raid graphics mirrors (`RAID*`): left alone. `/gsm diag` reports whether raid settings are enabled.
 - Resolution, graphics API, refresh rate, display device, and character models: out of scope.
 
 ## Quality levels
 
 ### View distance level
 
-How far the world is drawn. Blizzard quality level. Changing it also resets the detailed values it controls, so FGT applies it first.
+How far the world is drawn. Blizzard quality level. Changing it also resets the detailed values it controls, so GSM applies it first.
 
 - CVar: `graphicsViewDistance`
 - Range: 0 to 9
@@ -55,7 +55,7 @@ How far the world is drawn. Blizzard quality level. Changing it also resets the 
 
 ### Environment detail level
 
-Detail of buildings, trees, and props. Blizzard quality level. Changing it also resets the detailed values it controls, so FGT applies it first.
+Detail of buildings, trees, and props. Blizzard quality level. Changing it also resets the detailed values it controls, so GSM applies it first.
 
 - CVar: `graphicsEnvironmentDetail`
 - Range: 0 to 9
@@ -67,7 +67,7 @@ Detail of buildings, trees, and props. Blizzard quality level. Changing it also 
 
 ### Ground clutter level
 
-Amount and reach of grass and small ground plants. Blizzard quality level. Changing it also resets the detailed values it controls, so FGT applies it first.
+Amount and reach of grass and small ground plants. Blizzard quality level. Changing it also resets the detailed values it controls, so GSM applies it first.
 
 - CVar: `graphicsGroundClutter`
 - Range: 0 to 9
@@ -136,7 +136,7 @@ Objects smaller than this on screen get hidden. Lower values keep more small obj
 
 - CVar: `lodObjectCullSize`
 - Range: 4 to 30
-- Direction: lower values mean more detail, so FGT's slider runs right to left
+- Direction: lower values mean more detail, so GSM's slider runs right to left
 - Balanced: 12
 - Ultra: 8
 - Estimated impact: medium
@@ -188,7 +188,7 @@ Strength of the sharpening pass. 0 is strongest and 2 is weakest, so the slider 
 
 - CVar: `ResampleSharpness`
 - Range: 0 to 2, step 0.1
-- Direction: lower values mean more detail, so FGT's slider runs right to left
+- Direction: lower values mean more detail, so GSM's slider runs right to left
 - Balanced: unchanged
 - Ultra: unchanged
 - Estimated impact: low

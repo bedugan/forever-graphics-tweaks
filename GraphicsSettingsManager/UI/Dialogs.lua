@@ -1,4 +1,4 @@
--- A single confirm dialog owned by FGT. Avoids StaticPopup so FGT never
+-- A single confirm dialog owned by GSM. Avoids StaticPopup so GSM never
 -- shares a Blizzard dialog frame.
 local _, ns = ...
 
@@ -21,7 +21,7 @@ local function finish(accepted)
 end
 
 local function build()
-	frame = CreateFrame("Frame", "ForeverGraphicsTweaksConfirm", UIParent, "BackdropTemplate")
+	frame = CreateFrame("Frame", "GraphicsSettingsManagerConfirm", UIParent, "BackdropTemplate")
 	frame:SetSize(380, 150)
 	frame:SetPoint("CENTER", 0, 120)
 	frame:SetFrameStrata("FULLSCREEN_DIALOG")

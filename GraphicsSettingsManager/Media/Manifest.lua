@@ -4,9 +4,9 @@
 -- Example entry:
 -- groundEffectDensity = {
 --     build = "1.60.1.70790",
---     low = "Interface\\AddOns\\ForeverGraphicsTweaks\\Media\\groundEffectDensity_low",
---     medium = "Interface\\AddOns\\ForeverGraphicsTweaks\\Media\\groundEffectDensity_medium",
---     high = "Interface\\AddOns\\ForeverGraphicsTweaks\\Media\\groundEffectDensity_high",
+--     low = "Interface\\AddOns\\GraphicsSettingsManager\\Media\\groundEffectDensity_low",
+--     medium = "Interface\\AddOns\\GraphicsSettingsManager\\Media\\groundEffectDensity_medium",
+--     high = "Interface\\AddOns\\GraphicsSettingsManager\\Media\\groundEffectDensity_high",
 --     note = "Elwynn Forest, fixed camera, only this CVar changed.",
 -- },
 local _, ns = ...
