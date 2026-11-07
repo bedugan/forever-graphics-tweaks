@@ -1,0 +1,14 @@
+## Interface: 16001
+## Title: Graphics Settings Manager Capture
+## Notes: Developer tool. Takes Low, Medium, and High screenshots of each GSM setting. Not needed to play.
+## Author: Brian Dugan
+## Version: 0.1.0
+## Dependencies: GraphicsSettingsManager
+## SavedVariables: GraphicsSettingsManagerCaptureDB
+## IconTexture: Interface\Icons\INV_Misc_Spyglass_03
+## Category: Development Tools
+
+Runner.lua
+Band.lua
+Plan.lua
+Main.lua
